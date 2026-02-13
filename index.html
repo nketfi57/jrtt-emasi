@@ -916,11 +916,11 @@ window.exportPDF = () => {
 <title>Planning ${frDate(startD)} – ${frDate(endD)}</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;font-size:9px;color:#1a1d2e;background:#fff}
+body{font-family:'Segoe UI',sans-serif;font-size:9px;color:#1a1d2e;background:#fff;padding:8mm}
 .head{margin-bottom:10px}
 h1{font-size:13px;font-weight:800;color:#1a1d2e}
 .sub{font-size:8px;color:#64748b;margin-top:2px}
-table{border-collapse:collapse;width:100%;table-layout:fixed}
+table{border-collapse:collapse;width:100%;table-layout:fixed;margin-bottom:8px}
 th{background:#1a1d2e;color:rgba(255,255,255,.8);padding:4px 2px;font-size:7px;font-weight:700;border-right:1px solid #2d2f45;text-align:center}
 th.we{background:#22253a}
 .ddate{font-weight:400;opacity:.65}
@@ -928,10 +928,14 @@ td{border:1px solid #f1f5f9;text-align:center;vertical-align:middle;padding:2px 
 td.we{background:#fafbfd}
 .nc{text-align:left;padding:2px 6px;white-space:nowrap;position:sticky;left:0;background:#fff;border-right:2px solid #e2e8f0;font-size:8px}
 .nc.name{font-weight:700;font-size:9px;min-width:100px}
-.legend{display:flex;gap:14px;margin-top:8px;font-size:8px;flex-wrap:wrap}
+.legend{display:flex;gap:14px;margin-top:8px;font-size:8px;flex-wrap:wrap;margin-bottom:12px}
 .li{display:flex;align-items:center;gap:4px}
 .ld{width:10px;height:10px;border-radius:2px}
-@media print{@page{size:A3 landscape;margin:8mm}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.signature-box{text-align:right;margin-top:12px;page-break-inside:avoid}
+.signature-inner{border:1px solid #1a1d2e;display:inline-block;padding:8px 40px}
+.signature-label{font-size:8px;color:#64748b;margin-bottom:20px}
+.signature-space{height:30px}
+@media print{@page{size:A3 landscape;margin:8mm}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0}}
 </style></head><body>
 <div class="head">
   <h1>Planning Équipe — ${frDate(startD)} au ${frDate(endD)}</h1>
@@ -948,10 +952,10 @@ td.we{background:#fafbfd}
   <div class="li"><div class="ld" style="background:#8b5cf6"></div>VAC — Vacances Scolaires</div>
   <div class="li"><div class="ld" style="background:#f97316"></div>JF — Jour Férié</div>
 </div>
-<div style="margin-top:20px;text-align:right;padding-right:20px">
-  <div style="border:1px solid #1a1d2e;display:inline-block;padding:8px 40px">
-    <div style="font-size:8px;color:#64748b;margin-bottom:20px">Signature validation cycle</div>
-    <div style="height:30px"></div>
+<div class="signature-box">
+  <div class="signature-inner">
+    <div class="signature-label">Signature validation cycle</div>
+    <div class="signature-space"></div>
   </div>
 </div>
 </body></html>`;
@@ -964,7 +968,7 @@ td.we{background:#fafbfd}
 
 /* ── CSV EXPORT ──────────────────────────────────── */
 window.exportCSV = () => {
-  const rows=[["Matricule","Type","Date de début","Date de fin"]];
+  const rows=[["Matricule","Type","Date de début","Heure début","Date de fin","Heure fin"]];
   const all=[];
   PERSONS.forEach(nom=>{
     const d=data[nom];
@@ -975,7 +979,7 @@ window.exportCSV = () => {
   all.sort((a,b)=>a.date.localeCompare(b.date));
   all.forEach(e=>{
     const dd=new Date(e.date);
-    rows.push([e.id,e.type,`${frDate(dd)} 07:30`,`${frDate(dd)} 17:00`]);
+    rows.push([e.id,e.type,frDate(dd),"07:30",frDate(dd),"17:00"]);
   });
   const csv=rows.map(r=>r.join(";")).join("\n");
   const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
