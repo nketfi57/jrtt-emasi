@@ -6,516 +6,98 @@
 <title>Planning Équipe 2026</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, Arial, sans-serif; background: #f0f2f8; color: #1a1d2e; min-height: 100vh; }
 
-body {
-  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
-  background: #f0f2f8;
-  color: #1a1d2e;
-  min-height: 100vh;
-}
+.login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.login-box { background: #fff; border-radius: 16px; padding: 40px; width: 90%; max-width: 450px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+.login-box h1 { font-size: 1.8rem; font-weight: 800; color: #1a1d2e; margin-bottom: 8px; text-align: center; }
+.login-box p { font-size: .9rem; color: #64748b; margin-bottom: 32px; text-align: center; }
+.login-field { margin-bottom: 20px; }
+.login-field label { display: block; font-size: .85rem; font-weight: 700; color: #475569; margin-bottom: 8px; }
+.login-field input, .login-field select { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: .95rem; color: #1a1d2e; transition: border-color .2s; }
+.login-field input:focus, .login-field select:focus { outline: none; border-color: #667eea; }
+.login-btn { width: 100%; padding: 14px; background: #667eea; color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 8px; }
+.login-btn:hover { background: #5568d3; }
+.login-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+.login-error, .login-info { padding: 12px; border-radius: 8px; font-size: .85rem; margin-bottom: 20px; display: none; }
+.login-error { background: #fee2e2; color: #991b1b; }
+.login-info { background: #dbeafe; color: #1e40af; }
+.login-error.show, .login-info.show { display: block; }
+.pwd-strength { margin-top: 8px; font-size: .75rem; }
+.pwd-strength-bar { height: 4px; background: #e2e8f0; border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.pwd-strength-fill { height: 100%; width: 0%; transition: width .3s, background .3s; }
+.pwd-strength-fill.weak { background: #ef4444; width: 33%; }
+.pwd-strength-fill.medium { background: #eab308; width: 66%; }
+.pwd-strength-fill.strong { background: #22c55e; width: 100%; }
+.pwd-requirements { margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 6px; font-size: .75rem; }
+.pwd-req { display: flex; align-items: center; gap: 6px; color: #64748b; margin-bottom: 4px; }
+.pwd-req.valid { color: #22c55e; }
+.pwd-req::before { content: '○'; font-weight: bold; }
+.pwd-req.valid::before { content: '✓'; }
 
-/* ── LOGIN PAGE ─────────────────────────────────────── */
-.login-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.login-box {
-  background: #fff;
-  border-radius: 16px;
-  padding: 40px;
-  width: 90%;
-  max-width: 420px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.3);
-}
-
-.login-box h1 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: #1a1d2e;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-.login-box p {
-  font-size: .9rem;
-  color: #64748b;
-  margin-bottom: 32px;
-  text-align: center;
-}
-
-.login-field {
-  margin-bottom: 20px;
-}
-
-.login-field label {
-  display: block;
-  font-size: .85rem;
-  font-weight: 700;
-  color: #475569;
-  margin-bottom: 8px;
-}
-
-.login-field input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: .95rem;
-  color: #1a1d2e;
-  transition: border-color .2s;
-}
-
-.login-field input:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.login-btn {
-  width: 100%;
-  padding: 14px;
-  background: #667eea;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background .2s;
-  margin-top: 8px;
-}
-
-.login-btn:hover {
-  background: #5568d3;
-}
-
-.login-error {
-  background: #fee2e2;
-  color: #991b1b;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: .85rem;
-  margin-bottom: 20px;
-  display: none;
-}
-
-.login-error.show {
-  display: block;
-}
-
-/* ── HEADER ─────────────────────────────────────────── */
-header {
-  background: #1a1d2e;
-  color: #fff;
-  padding: 0 28px;
-  height: 54px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 12px rgba(0,0,0,.25);
-}
-
-header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space: nowrap; }
-
+header { background: #1a1d2e; color: #fff; padding: 0 28px; height: 54px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.25); }
+header h1 { font-size: 1rem; font-weight: 700; }
 .header-sep { flex: 1; }
-
-.user-badge {
-  font-size: .75rem;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: rgba(255,255,255,.1);
-  color: #cbd5e1;
-  font-weight: 600;
-}
-
-.user-badge.admin {
-  background: rgba(249,115,22,.2);
-  color: #fdba74;
-}
-
-.sync-pill {
-  font-size: .72rem; font-weight: 600; padding: 4px 12px;
-  border-radius: 20px; background: rgba(255,255,255,.1); color: #cbd5e1;
-  transition: all .3s;
-}
-.sync-pill.ok      { background: rgba(34,197,94,.22);  color: #86efac; }
-.sync-pill.loading { background: rgba(234,179,8,.2);   color: #fde047; }
-.sync-pill.error   { background: rgba(239,68,68,.2);   color: #fca5a5; }
-
-.hbtn {
-  display: flex; align-items: center; gap: 5px;
-  padding: 6px 13px; border-radius: 7px; border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.07); color: #e2e8f0;
-  font-size: .78rem; font-weight: 600; cursor: pointer; white-space: nowrap;
-  transition: background .15s, border-color .15s;
-}
-.hbtn:hover { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.35); }
-.hbtn.accent { background: #4f5edc; border-color: #4f5edc; color: #fff; }
-.hbtn.accent:hover { background: #3d4cc8; }
+.user-badge { font-size: .75rem; padding: 4px 12px; border-radius: 20px; background: rgba(255,255,255,.1); color: #cbd5e1; font-weight: 600; }
+.user-badge.admin { background: rgba(249,115,22,.2); color: #fdba74; }
+.user-badge.super-admin { background: rgba(139,92,246,.3); color: #c4b5fd; }
+.hbtn { display: flex; align-items: center; gap: 5px; padding: 6px 13px; border-radius: 7px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.07); color: #e2e8f0; font-size: .78rem; font-weight: 600; cursor: pointer; transition: background .15s; }
+.hbtn:hover { background: rgba(255,255,255,.15); }
 .hbtn.red { background: rgba(239,68,68,.18); border-color: rgba(239,68,68,.4); color: #fca5a5; }
 
-/* ── LAYOUT ─────────────────────────────────────────── */
-.layout {
-  display: flex;
-  height: calc(100vh - 54px);
-  overflow: hidden;
-}
+.layout { display: flex; height: calc(100vh - 54px); overflow: hidden; }
+.sidebar { width: 200px; background: #fff; border-right: 1px solid #e2e8f0; padding: 14px; overflow-y: auto; }
+.sidebar-label { font-size: .68rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 10px; }
+.type-legend { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+.type-pill { display: flex; align-items: center; gap: 7px; padding: 5px 9px; border-radius: 7px; border: 1px solid; font-size: .75rem; font-weight: 700; }
+.type-pill-dot { width: 8px; height: 8px; border-radius: 2px; }
 
-/* ── SIDEBAR ─────────────────────────────────────────── */
-.sidebar {
-  width: 196px; min-width: 196px;
-  background: #fff; border-right: 1px solid #e2e8f0;
-  display: flex; flex-direction: column; overflow: hidden;
-  transition: width .2s;
-}
-
-.sidebar-top {
-  padding: 14px 14px 10px;
-  border-bottom: 1px solid #e2e8f0;
-  flex-shrink: 0;
-}
-
-.sidebar-label {
-  font-size: .68rem; font-weight: 800; color: #94a3b8;
-  text-transform: uppercase; letter-spacing: 1.1px; margin-bottom: 10px;
-}
-
-/* Type legend pills */
-.type-legend {
-  display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px;
-}
-.type-pill {
-  display: flex; align-items: center; gap: 7px;
-  padding: 5px 9px; border-radius: 7px; border: 1px solid;
-  cursor: pointer; user-select: none; transition: opacity .15s;
-  font-size: .75rem; font-weight: 700;
-}
-.type-pill.off { opacity: .32; }
-.type-pill-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-.type-pill-count { margin-left: auto; font-size: .68rem; font-weight: 600; opacity: .7; }
-
-.tp-CA   { background: rgba(239,68,68,.1);   color: #b91c1c; border-color: rgba(239,68,68,.3); }
-.tp-JRTT { background: rgba(34,197,94,.1);   color: #15803d; border-color: rgba(34,197,94,.3); }
-.tp-CET  { background: rgba(234,179,8,.13);  color: #92400e; border-color: rgba(234,179,8,.35); }
-.tp-VAC  { background: rgba(139,92,246,.1);  color: #6d28d9; border-color: rgba(139,92,246,.3); }
-.tp-JF   { background: rgba(249,115,22,.1);  color: #c2410c; border-color: rgba(249,115,22,.3); }
-
-.dot-CA   { background: #ef4444; }
-.dot-JRTT { background: #22c55e; }
-.dot-CET  { background: #eab308; }
-.dot-VAC  { background: #8b5cf6; }
-.dot-JF   { background: #f97316; }
-
-.toggle-row {
-  display: flex; gap: 5px;
-}
-.tgl-btn {
-  flex: 1; padding: 5px 6px; border: 1px solid #e2e8f0; border-radius: 6px;
-  background: #f8fafc; font-size: .72rem; color: #475569; cursor: pointer;
-  font-weight: 600; transition: background .12s;
-  text-align: center;
-}
-.tgl-btn:hover { background: #e2e8f0; }
-
-.person-list { flex: 1; overflow-y: auto; padding: 6px 0; }
-.person-list::-webkit-scrollbar { width: 4px; }
-.person-list::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
-
-.person-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 14px; cursor: pointer; user-select: none;
-  transition: background .1s, opacity .15s;
-}
-.person-row:hover { background: #f8fafc; }
-.person-row.off { opacity: .32; }
-
-.pdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.pname { font-size: .8rem; font-weight: 600; color: #1e293b; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pid   { font-size: .66rem; color: #94a3b8; }
-
-/* ── MAIN ─────────────────────────────────────────────── */
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-
-/* ── TOOLBAR ─────────────────────────────────────────── */
-.toolbar {
-  background: #fff; border-bottom: 1px solid #e2e8f0;
-  padding: 10px 22px; display: flex; align-items: center; gap: 10px;
-  flex-shrink: 0; flex-wrap: wrap;
-}
-
-.nav-group { display: flex; align-items: center; gap: 4px; }
-
-.nbtn {
-  padding: 6px 14px; border: 1px solid #e2e8f0; border-radius: 7px;
-  background: #fff; font-size: .82rem; color: #374151; cursor: pointer;
-  font-weight: 600; transition: background .12s;
-}
-.nbtn:hover { background: #f1f5f9; }
-.nbtn.today { background: #1a1d2e; color: #fff; border-color: #1a1d2e; }
-.nbtn.today:hover { opacity: .85; }
-
-.month-title {
-  font-size: 1rem; font-weight: 800; color: #1a1d2e;
-  min-width: 190px; text-align: center; letter-spacing: .2px;
-}
-
-.tsep { flex: 1; }
-
-.view-tabs {
-  display: flex; gap: 1px; background: #f1f5f9;
-  border: 1px solid #e2e8f0; border-radius: 8px; padding: 2px;
-}
-.vtab {
-  padding: 5px 13px; border-radius: 6px; font-size: .78rem; font-weight: 600;
-  cursor: pointer; color: #64748b; transition: all .15s; border: none; background: none;
-}
-.vtab.active { background: #1a1d2e; color: #fff; }
-
-.count-badge {
-  font-size: .76rem; color: #64748b; background: #f1f5f9;
-  padding: 5px 13px; border-radius: 20px; font-weight: 600;
-  border: 1px solid #e2e8f0; white-space: nowrap;
-}
-
-/* ── CALENDAR SCROLL ────────────────────────────────── */
-.cal-scroll { flex: 1; overflow-y: auto; padding: 18px 22px 40px; }
-.cal-scroll::-webkit-scrollbar { width: 6px; }
-.cal-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
-
-/* ── MONTH GRID ──────────────────────────────────────── */
-.cal-wrap {
-  background: #fff; border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 10px rgba(0,0,0,.06);
-  overflow: hidden;
-}
-
-.cal-head-row {
-  display: grid; grid-template-columns: 40px repeat(7, 1fr);
-  background: #1a1d2e;
-}
-.cal-head-cell {
-  padding: 11px 6px; font-size: .7rem; font-weight: 800;
-  color: rgba(255,255,255,.75); text-align: center;
-  text-transform: uppercase; letter-spacing: .9px;
-  border-right: 1px solid #2d2f45;
-}
-.cal-head-cell:last-child { border-right: none; }
-.cal-head-empty { border-right: 1px solid #2d2f45; }
-
+.toolbar { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 10px 22px; display: flex; align-items: center; gap: 10px; }
+.month-title { font-size: 1rem; font-weight: 800; color: #1a1d2e; text-align: center; }
+.cal-scroll { flex: 1; overflow-y: auto; padding: 18px 22px; }
+.cal-wrap { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 10px rgba(0,0,0,.06); overflow: hidden; }
+.cal-head-row { display: grid; grid-template-columns: 40px repeat(7, 1fr); background: #1a1d2e; }
+.cal-head-cell { padding: 11px 6px; font-size: .7rem; font-weight: 800; color: rgba(255,255,255,.75); text-align: center; text-transform: uppercase; border-right: 1px solid #2d2f45; }
 .cal-body { display: grid; grid-template-columns: 40px repeat(7, 1fr); }
-
-.wnum {
-  background: #f8fafc; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .62rem; color: #94a3b8; font-weight: 700; letter-spacing: .3px;
-}
-
-.dcell {
-  border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;
-  min-height: 84px; padding: 6px 5px; background: #fff;
-  transition: background .12s;
-  position: relative;
-}
-.dcell:last-child { border-right: none; }
-.dcell.other  { background: #fafbfd; }
-.dcell.other .dnum { color: #d1d5db; }
-.dcell.wkend  { background: #fcfcfe; }
+.wnum { background: #f8fafc; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: .62rem; color: #94a3b8; font-weight: 700; }
+.dcell { border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; min-height: 84px; padding: 6px 5px; background: #fff; transition: background .12s; }
+.dcell.other { background: #fafbfd; }
+.dcell.wkend { background: #fcfcfe; }
 .dcell.todaycell { background: #eff6ff; }
 .dcell.clickable { cursor: pointer; }
 .dcell.clickable:hover { background: #fef3c7; }
-
-.dnum {
-  font-size: .75rem; font-weight: 800; color: #475569;
-  width: 22px; height: 22px; border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center;
-  margin-bottom: 4px;
-}
+.dnum { font-size: .75rem; font-weight: 800; color: #475569; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 4px; }
 .dcell.todaycell .dnum { background: #1a1d2e; color: #fff; }
-
 .tags { display: flex; flex-direction: column; gap: 2px; }
+.etag { font-size: .64rem; font-weight: 700; padding: 2px 5px; border-radius: 3px; border-left: 3px solid; line-height: 1.4; }
 
-.etag {
-  font-size: .64rem; font-weight: 700; padding: 2px 5px; border-radius: 3px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  border-left: 3px solid; cursor: default;
-  letter-spacing: .1px; line-height: 1.4;
-}
-
-/* per-person background colors */
-.bg-PLATEROTI  { background:#fef3c7; color:#78350f; border-color:#f59e0b; }
-.bg-SCHENCK    { background:#dbeafe; color:#1e40af; border-color:#3b82f6; }
-.bg-CALLEA     { background:#fce7f3; color:#9d174d; border-color:#ec4899; }
-.bg-DAUTEL     { background:#dcfce7; color:#14532d; border-color:#22c55e; }
-.bg-GRIMAUD    { background:#ede9fe; color:#4c1d95; border-color:#8b5cf6; }
-.bg-GILLES     { background:#fee2e2; color:#7f1d1d; border-color:#ef4444; }
-.bg-ZIMMERMANN { background:#e0f2fe; color:#0c4a6e; border-color:#0ea5e9; }
-.bg-RABETGE    { background:#ecfdf5; color:#064e3b; border-color:#10b981; }
-.bg-KLEIN      { background:#fff7ed; color:#7c2d12; border-color:#f97316; }
-.bg-DEBS       { background:#f5f3ff; color:#4c1d95; border-color:#7c3aed; }
-.bg-VAUBOURG   { background:#fdf2f8; color:#701a75; border-color:#d946ef; }
-.bg-MARTEL     { background:#f0fdf4; color:#14532d; border-color:#16a34a; }
-.bg-DALMAS     { background:#fff1f2; color:#881337; border-color:#e11d48; }
-.bg-CHRISTOPHE { background:#f0f9ff; color:#0c4a6e; border-color:#0284c7; }
-.bg-CLAUDE     { background:#fefce8; color:#713f12; border-color:#ca8a04; }
-.bg-ETIEN      { background:#fce7f3; color:#831843; border-color:#db2777; }
-.bg-VAC        { background:rgba(139,92,246,.12); color:#5b21b6; border-color:#8b5cf6; }
-.bg-JF         { background:rgba(249,115,22,.12); color:#c2410c; border-color:#f97316; }
-
-/* dot colors in sidebar */
-.pdot-PLATEROTI  { background:#f59e0b; }
-.pdot-SCHENCK    { background:#3b82f6; }
-.pdot-CALLEA     { background:#ec4899; }
-.pdot-DAUTEL     { background:#22c55e; }
-.pdot-GRIMAUD    { background:#8b5cf6; }
-.pdot-GILLES     { background:#ef4444; }
-.pdot-ZIMMERMANN { background:#0ea5e9; }
-.pdot-RABETGE    { background:#10b981; }
-.pdot-KLEIN      { background:#f97316; }
-.pdot-DEBS       { background:#7c3aed; }
-.pdot-VAUBOURG   { background:#d946ef; }
-.pdot-MARTEL     { background:#16a34a; }
-.pdot-DALMAS     { background:#e11d48; }
-.pdot-CHRISTOPHE { background:#0284c7; }
-.pdot-CLAUDE     { background:#ca8a04; }
-.pdot-ETIEN      { background:#db2777; }
-
-/* ── LIST VIEW ─────────────────────────────────────── */
-.list-wrap {
-  background:#fff; border-radius:12px; border:1px solid #e2e8f0;
-  box-shadow:0 1px 10px rgba(0,0,0,.06); overflow:hidden;
-}
-.list-table { width:100%; border-collapse:collapse; }
-.list-table th {
-  background:#1a1d2e; color:rgba(255,255,255,.8);
-  padding:10px 16px; font-size:.72rem; font-weight:700;
-  text-transform:uppercase; letter-spacing:.8px; text-align:left;
-  position:sticky; top:0;
-}
-.list-table td { padding:8px 16px; font-size:.82rem; border-bottom:1px solid #f1f5f9; }
-.list-table tr:hover td { background:#f8fafc; }
-
-/* ── GRID VIEW ─────────────────────────────────────── */
-.grid-wrap {
-  background:#fff; border-radius:12px; border:1px solid #e2e8f0;
-  box-shadow:0 1px 10px rgba(0,0,0,.06); overflow:auto;
-}
-.grid-table { border-collapse:collapse; min-width:100%; }
-.grid-table th {
-  background:#1a1d2e; color:rgba(255,255,255,.8);
-  padding:9px 10px; font-size:.68rem; font-weight:700;
-  text-align:center; border-right:1px solid #2d2f45;
-  white-space:nowrap; position:sticky; top:0;
-}
-.grid-table th.sticky-col { left:0; z-index:2; text-align:left; padding-left:14px; min-width:110px; }
-.grid-table td {
-  border-bottom:1px solid #f1f5f9; border-right:1px solid #f1f5f9;
-  text-align:center; padding:4px 3px; font-size:.7rem; min-width:32px;
-}
-.grid-table td.sticky-col {
-  position:sticky; left:0; background:#fff; z-index:1;
-  text-align:left; padding-left:14px; font-weight:700; font-size:.78rem;
-  border-right:2px solid #e2e8f0; white-space:nowrap;
-}
-.grid-table tr:hover td { background:#f8fafc; }
-.grid-table tr:hover td.sticky-col { background:#f1f5f9; }
-.gcell { border-radius:3px; padding:2px 4px; font-size:.65rem; font-weight:800; }
-.gcell-wkend { background:#f8fafc; }
-
-/* ── MODALS ─────────────────────────────────────────── */
-.overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,.5);
-  display:flex; align-items:center; justify-content:center;
-  z-index:500; backdrop-filter:blur(4px);
-  opacity:0; pointer-events:none; transition:opacity .2s;
-}
-.overlay.show { opacity:1; pointer-events:all; }
-.modal {
-  background:#fff; border-radius:16px; padding:28px;
-  width:90vw; max-width:520px; box-shadow:0 24px 64px rgba(0,0,0,.25);
-  max-height:85vh; overflow-y:auto;
-}
-.modal h2 { font-size:1.05rem; font-weight:800; margin-bottom:6px; color:#1a1d2e; }
-.modal p  { font-size:.82rem; color:#64748b; margin-bottom:18px; }
-
-.modal-field { margin-bottom:14px; }
-.modal-field label { display:block; font-size:.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.6px; margin-bottom:6px; }
-.modal-field input[type=date], .modal-field select {
-  width:100%; padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px;
-  font-size:.88rem; color:#1a1d2e; background:#f8fafc;
-  transition:border-color .15s;
-}
-.modal-field input[type=date]:focus, .modal-field select:focus { outline:none; border-color:#4f5edc; background:#fff; }
-
-.drop-zone {
-  border:2px dashed #e2e8f0; border-radius:12px;
-  padding:36px 24px; text-align:center; cursor:pointer;
-  transition:border-color .2s, background .2s; margin-bottom:14px;
-}
-.drop-zone:hover, .drop-zone.drag { border-color:#4f5edc; background:#f8f9ff; }
-.drop-icon { font-size:2rem; margin-bottom:8px; }
-.drop-main { font-weight:700; color:#1a1d2e; font-size:.88rem; margin-bottom:4px; }
-.drop-sub  { font-size:.76rem; color:#94a3b8; }
-
-.modal-footer { display:flex; justify-content:flex-end; gap:8px; margin-top:18px; }
-.mbtn {
-  padding:8px 18px; border-radius:8px; font-size:.82rem; font-weight:700;
-  cursor:pointer; border:1px solid #e2e8f0; background:#f8fafc; color:#475569;
-  transition:all .15s;
-}
-.mbtn:hover { background:#e2e8f0; }
-.mbtn.primary { background:#1a1d2e; color:#fff; border-color:#1a1d2e; }
-.mbtn.primary:hover { opacity:.85; }
-.mbtn.danger { background:#ef4444; color:#fff; border-color:#ef4444; }
-.mbtn.danger:hover { opacity:.85; }
-.mbtn:disabled { opacity:.45; cursor:not-allowed; }
-
-/* checklist in download modal */
-.check-list { border:1px solid #e2e8f0; border-radius:10px; overflow:hidden; max-height:240px; overflow-y:auto; margin-bottom:12px; }
-.check-row {
-  display:flex; align-items:center; gap:10px;
-  padding:8px 14px; cursor:pointer; transition:background .1s;
-}
-.check-row:hover { background:#f8fafc; }
-.check-row:not(:last-child) { border-bottom:1px solid #f1f5f9; }
-.cbox {
-  width:16px; height:16px; border-radius:4px; border:1.5px solid #d1d5db;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  transition:all .15s;
-}
-.cbox.checked { background:#1a1d2e; border-color:#1a1d2e; }
-.cbox.checked::after { content:'✓'; font-size:10px; color:#fff; font-weight:800; }
-.cname { font-size:.82rem; font-weight:600; flex:1; }
-.cid   { font-size:.7rem; color:#94a3b8; }
-
-.imp-events-note {
-  padding:10px 14px; background:#f0fdf4; border:1px solid #bbf7d0;
-  border-radius:8px; font-size:.78rem; color:#166534; margin-bottom:12px;
-  display:flex; align-items:center; gap:8px;
-}
-
-@media (max-width:640px) {
-  .sidebar { display:none; }
-  .cal-scroll { padding:10px; }
-  .dcell { min-height:60px; }
-}
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 500; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.overlay.show { opacity: 1; pointer-events: all; }
+.modal { background: #fff; border-radius: 16px; padding: 28px; width: 90vw; max-width: 520px; box-shadow: 0 24px 64px rgba(0,0,0,.25); max-height: 85vh; overflow-y: auto; }
+.modal h2 { font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #1a1d2e; }
+.modal p { font-size: .82rem; color: #64748b; margin-bottom: 18px; }
+.modal-field { margin-bottom: 14px; }
+.modal-field label { display: block; font-size: .72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }
+.modal-field input, .modal-field select { width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: .88rem; color: #1a1d2e; background: #f8fafc; }
+.modal-field input:focus, .modal-field select:focus { outline: none; border-color: #4f5edc; background: #fff; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.mbtn { padding: 8px 18px; border-radius: 8px; font-size: .82rem; font-weight: 700; cursor: pointer; border: 1px solid #e2e8f0; background: #f8fafc; color: #475569; transition: all .15s; }
+.mbtn:hover { background: #e2e8f0; }
+.mbtn.primary { background: #1a1d2e; color: #fff; border-color: #1a1d2e; }
+.mbtn.danger { background: #ef4444; color: #fff; border-color: #ef4444; }
+.mbtn:disabled { opacity: .45; cursor: not-allowed; }
 </style>
 </head>
 <body>
 
-<!-- ── LOGIN PAGE ─────────────────────────────────── -->
 <div class="login-page" id="loginPage">
   <div class="login-box">
     <h1>Planning Équipe 2026</h1>
-    <p>Connectez-vous pour accéder à votre planning</p>
+    <p id="loginSubtitle">Connectez-vous pour accéder à votre planning</p>
     <div class="login-error" id="loginError">Identifiant ou mot de passe incorrect</div>
+    <div class="login-info" id="loginInfo"></div>
+    
     <form id="loginForm" onsubmit="handleLogin(event)">
       <div class="login-field">
         <label>Identifiant</label>
@@ -527,141 +109,90 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
       </div>
       <button type="submit" class="login-btn">Se connecter</button>
     </form>
+
+    <form id="changePasswordForm" onsubmit="handleChangePassword(event)" style="display:none">
+      <div class="login-field">
+        <label>Nouveau mot de passe</label>
+        <input type="password" id="newPassword" required oninput="checkPasswordStrength()">
+        <div class="pwd-strength">
+          <div class="pwd-strength-bar"><div class="pwd-strength-fill" id="pwdStrengthFill"></div></div>
+        </div>
+        <div class="pwd-requirements">
+          <div class="pwd-req" id="req-length">Au moins 8 caractères</div>
+          <div class="pwd-req" id="req-uppercase">Au moins 1 majuscule</div>
+          <div class="pwd-req" id="req-number">Au moins 1 chiffre</div>
+        </div>
+      </div>
+      <div class="login-field">
+        <label>Confirmer le mot de passe</label>
+        <input type="password" id="confirmPassword" required>
+      </div>
+      <button type="submit" class="login-btn" id="changePwdBtn" disabled>Changer le mot de passe</button>
+    </form>
+
+    <form id="securityQuestionsForm" onsubmit="handleSetupSecurityQuestions(event)" style="display:none">
+      <div class="login-field">
+        <label>Question de sécurité 1</label>
+        <select id="secQ1" required>
+          <option value="">Choisir...</option>
+          <option value="birth_city">Dans quelle ville êtes-vous né(e) ?</option>
+          <option value="first_pet">Nom de votre premier animal ?</option>
+          <option value="mother_maiden">Nom de jeune fille de votre mère ?</option>
+        </select>
+      </div>
+      <div class="login-field">
+        <label>Réponse 1</label>
+        <input type="text" id="secA1" required>
+      </div>
+      <div class="login-field">
+        <label>Question de sécurité 2</label>
+        <select id="secQ2" required>
+          <option value="">Choisir...</option>
+          <option value="favorite_book">Votre livre préféré ?</option>
+          <option value="childhood_friend">Prénom de votre meilleur ami d'enfance ?</option>
+        </select>
+      </div>
+      <div class="login-field">
+        <label>Réponse 2</label>
+        <input type="text" id="secA2" required>
+      </div>
+      <button type="submit" class="login-btn">Enregistrer et continuer</button>
+    </form>
   </div>
 </div>
 
-<!-- ── MAIN APP ─────────────────────────────────────── -->
 <div id="mainApp" style="display:none">
-
 <header>
   <h1>Planning Équipe 2026</h1>
   <div class="user-badge" id="userBadge"></div>
   <div class="header-sep"></div>
-  <input type="file" id="icsFileInput" accept=".ics" multiple style="display:none">
-  <button class="hbtn admin-only" onclick="showModal('managePersonsModal')">Gérer personnes</button>
-  <button class="hbtn admin-only" onclick="showModal('importModal')">Importer ICS</button>
-  <button class="hbtn admin-only" onclick="exportCSV()">Export CSV</button>
-  <button class="hbtn admin-only" onclick="showModal('pdfModal')">PDF Cycle</button>
-  <button class="hbtn accent admin-only" onclick="showModal('dlModal')">DL ICS</button>
-  <span class="sync-pill loading" id="syncPill">Connexion…</span>
+  <button class="hbtn super-admin-only" onclick="showModal('manageTypesModal')" style="display:none">Gérer types</button>
+  <button class="hbtn" onclick="showModal('changeMyPasswordModal')">Changer mot de passe</button>
   <button class="hbtn red" onclick="logout()">Déconnexion</button>
 </header>
 
 <div class="layout">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-top">
-      <div class="sidebar-label">Types</div>
-      <div class="type-legend" id="typeLegend"></div>
-      <div class="sidebar-label admin-only" style="margin-top:10px">Collaborateurs</div>
-      <div class="toggle-row admin-only">
-        <button class="tgl-btn" onclick="selectAllPersons()">Tous</button>
-        <button class="tgl-btn" onclick="selectNonePersons()">Aucun</button>
-      </div>
-    </div>
-    <div class="person-list" id="personList"></div>
+    <div class="sidebar-label">Types d'absence</div>
+    <div class="type-legend" id="typeLegend"></div>
   </aside>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="toolbar">
-      <div class="nav-group">
-        <button class="nbtn" onclick="prevYear()">«</button>
-        <button class="nbtn" onclick="prevMonth()">‹</button>
-        <div class="month-title" id="monthTitle">—</div>
-        <button class="nbtn" onclick="nextMonth()">›</button>
-        <button class="nbtn" onclick="nextYear()">»</button>
-        <button class="nbtn today" onclick="goToday()">Auj.</button>
-      </div>
-      <div class="tsep"></div>
-      <div class="view-tabs">
-        <button class="vtab active" id="vtab-month" onclick="setView('month')">Mois</button>
-        <button class="vtab admin-only" id="vtab-list"  onclick="setView('list')">Liste</button>
-        <button class="vtab admin-only" id="vtab-grid"  onclick="setView('grid')">Grille</button>
-      </div>
-      <div class="count-badge" id="countBadge">0 jours</div>
+      <div class="month-title" id="monthTitle">—</div>
     </div>
     <div class="cal-scroll" id="calScroll"></div>
   </div>
 </div>
-
-<!-- ── MODAL IMPORT ICS ─────────────────────────────── -->
-<div class="overlay" id="importModal">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h2>Importer un calendrier ICS</h2>
-    <p>Vacances scolaires, jours fériés, événements d'entreprise…</p>
-    <div class="drop-zone" id="dropZone" onclick="document.getElementById('icsFileInput').click()">
-      <div class="drop-icon">📂</div>
-      <div class="drop-main">Cliquer ou glisser des fichiers .ics</div>
-      <div class="drop-sub">Plusieurs fichiers acceptés</div>
-    </div>
-    <div class="imp-events-note" id="importNote" style="display:none">
-      <span>✅</span><span id="importNoteText"></span>
-      <button class="mbtn" style="margin-left:auto;font-size:.72rem;padding:4px 10px" onclick="clearImports()">Effacer</button>
-    </div>
-    <div class="modal-footer">
-      <button class="mbtn" onclick="hideModal('importModal')">Fermer</button>
-    </div>
-  </div>
 </div>
 
-<!-- ── MODAL PDF ──────────────────────────────────────── -->
-<div class="overlay" id="pdfModal">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h2>Export PDF — Cycle</h2>
-    <p>Choisissez la plage de dates. Recommandé : 8 semaines = ~56 jours.</p>
-    <div style="display:flex;gap:14px">
-      <div class="modal-field" style="flex:1">
-        <label>Début</label>
-        <input type="date" id="pdfStart" value="2026-01-19">
-      </div>
-      <div class="modal-field" style="flex:1">
-        <label>Fin</label>
-        <input type="date" id="pdfEnd" value="2026-03-13">
-      </div>
-    </div>
-    <div style="padding:10px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:.8rem;color:#475569;margin-bottom:4px">
-      <strong id="pdfInfo">Durée : — jours</strong><br>
-      <span id="pdfPersonsInfo"></span>
-    </div>
-    <div class="modal-footer">
-      <button class="mbtn" onclick="hideModal('pdfModal')">Annuler</button>
-      <button class="mbtn primary" onclick="exportPDF()">Générer & Imprimer</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── MODAL DOWNLOAD ICS ─────────────────────────────── -->
-<div class="overlay" id="dlModal">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h2>Télécharger ICS Salariés</h2>
-    <p>Sélectionnez les collaborateurs, puis téléchargez leur planning au format .ics.</p>
-    <div style="display:flex;gap:8px;margin-bottom:10px">
-      <button class="mbtn" style="font-size:.74rem" onclick="dlSelectAll()">Tout sélectionner</button>
-      <button class="mbtn" style="font-size:.74rem" onclick="dlSelectNone()">Tout désélectionner</button>
-    </div>
-    <div class="check-list" id="dlCheckList"></div>
-    <div style="font-size:.78rem;color:#64748b;margin-bottom:6px" id="dlCount">0 sélectionné(s)</div>
-    <div class="modal-footer">
-      <button class="mbtn" onclick="hideModal('dlModal')">Annuler</button>
-      <button class="mbtn primary" id="dlBtn" onclick="downloadICS()">Télécharger</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── MODAL ADD EVENT ─────────────────────────────────── -->
 <div class="overlay" id="addEventModal">
   <div class="modal" onclick="event.stopPropagation()">
     <h2>Ajouter un jour</h2>
     <p id="addEventDate"></p>
     <div class="modal-field">
       <label>Type</label>
-      <select id="addEventType">
-        <option value="CA">Congé Annuel (CA)</option>
-        <option value="JRTT">JRTT</option>
-        <option value="CET">CET</option>
-      </select>
+      <select id="addEventType"></select>
     </div>
     <div class="modal-footer">
       <button class="mbtn" onclick="hideModal('addEventModal')">Annuler</button>
@@ -670,7 +201,6 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
   </div>
 </div>
 
-<!-- ── MODAL DELETE EVENT ─────────────────────────────── -->
 <div class="overlay" id="deleteEventModal">
   <div class="modal" onclick="event.stopPropagation()">
     <h2>Supprimer un jour</h2>
@@ -682,868 +212,343 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
   </div>
 </div>
 
-<!-- ── MODAL MANAGE PERSONS ─────────────────────────────── -->
-<div class="overlay" id="managePersonsModal">
-  <div class="modal" onclick="event.stopPropagation()" style="max-width:600px">
-    <h2>Gérer les personnes</h2>
-    <p>Ajouter ou supprimer des collaborateurs</p>
-    
-    <div style="margin-bottom:20px">
-      <h3 style="font-size:.9rem;font-weight:700;margin-bottom:10px;color:#1a1d2e">Ajouter une personne</h3>
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <input type="text" id="newPersonName" placeholder="Nom (ex: DUPONT)" style="flex:1;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:.88rem">
-        <input type="text" id="newPersonId" placeholder="Matricule (ex: R500)" style="width:120px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:.88rem">
+<div class="overlay" id="changeMyPasswordModal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>Changer mon mot de passe</h2>
+    <form id="changeMyPasswordForm" onsubmit="handleChangeMyPassword(event)">
+      <div class="modal-field">
+        <label>Mot de passe actuel</label>
+        <input type="password" id="currentPassword" required>
       </div>
-      <button class="mbtn primary" onclick="addNewPerson()" style="width:100%">Ajouter</button>
-    </div>
-    
-    <div>
-      <h3 style="font-size:.9rem;font-weight:700;margin-bottom:10px;color:#1a1d2e">Liste des personnes</h3>
-      <div id="personManageList" style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;max-height:300px;overflow-y:auto"></div>
-    </div>
-    
+      <div class="modal-field">
+        <label>Nouveau mot de passe</label>
+        <input type="password" id="myNewPassword" required oninput="checkMyPasswordStrength()">
+        <div class="pwd-strength">
+          <div class="pwd-strength-bar"><div class="pwd-strength-fill" id="myPwdStrengthFill"></div></div>
+        </div>
+        <div class="pwd-requirements">
+          <div class="pwd-req" id="my-req-length">Au moins 8 caractères</div>
+          <div class="pwd-req" id="my-req-uppercase">Au moins 1 majuscule</div>
+          <div class="pwd-req" id="my-req-number">Au moins 1 chiffre</div>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label>Confirmer</label>
+        <input type="password" id="myConfirmPassword" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="mbtn" onclick="hideModal('changeMyPasswordModal')">Annuler</button>
+        <button type="submit" class="mbtn primary" id="changeMyPwdBtn" disabled>Changer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="overlay" id="manageTypesModal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>Gérer les types</h2>
+    <p>Configuration des types CA, JRTT, CET</p>
+    <div id="typeConfigList"></div>
     <div class="modal-footer">
-      <button class="mbtn" onclick="hideModal('managePersonsModal')">Fermer</button>
+      <button class="mbtn" onclick="hideModal('manageTypesModal')">Fermer</button>
     </div>
   </div>
 </div>
 
-</div>
-
-<script type="module">
-import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getFirestore, collection, getDocs, setDoc, doc, onSnapshot, deleteDoc }
-  from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-/* ── FIREBASE ─────────────────────────────────────── */
-const FB = {
-  apiKey: "AIzaSyDU4aG4r7Q2240-ZwUdkxoLUJzHz_hWB1k",
-  authDomain: "jrtt-40d51.firebaseapp.com",
-  projectId: "jrtt-40d51",
-  storageBucket: "jrtt-40d51.firebasestorage.app",
-  messagingSenderId: "687953805213",
-  appId: "1:687953805213:web:a74a14667da4874a58b974"
-};
-const app = initializeApp(FB);
-const db  = getFirestore(app);
-
-/* ── USERS DATABASE ─────────────────────────────────── */
+<script>
 const USERS = {
-  // ADMINS
-  "thierry": { password: "planning2026", role: "admin", name: "PLATEROTI Thierry", personKey: "PLATEROTI Thierry" },
-  "vincent": { password: "planning2026", role: "admin", name: "ETIEN Vincent", personKey: "ETIEN Vincent" },
-  
-  // EMPLOYEES
-  "schenck": { password: "schenck2026", role: "employee", name: "SCHENCK", personKey: "SCHENCK" },
-  "callea": { password: "callea2026", role: "employee", name: "CALLEA", personKey: "CALLEA" },
-  "dautel": { password: "dautel2026", role: "employee", name: "DAUTEL", personKey: "DAUTEL" },
-  "grimaud": { password: "grimaud2026", role: "employee", name: "GRIMAUD", personKey: "GRIMAUD" },
-  "gilles": { password: "gilles2026", role: "employee", name: "GILLES", personKey: "GILLES" },
-  "zimmermann": { password: "zimmermann2026", role: "employee", name: "ZIMMERMANN", personKey: "ZIMMERMANN" },
-  "rabetge": { password: "rabetge2026", role: "employee", name: "RABETGE", personKey: "RABETGE" },
-  "klein": { password: "klein2026", role: "employee", name: "KLEIN", personKey: "KLEIN" },
-  "debs": { password: "debs2026", role: "employee", name: "DEBS", personKey: "DEBS" },
-  "vaubourg": { password: "vaubourg2026", role: "employee", name: "VAUBOURG", personKey: "VAUBOURG" },
-  "martel": { password: "martel2026", role: "employee", name: "MARTEL", personKey: "MARTEL" },
-  "dalmas": { password: "dalmas2026", role: "employee", name: "DALMAS", personKey: "DALMAS" },
-  "christophe": { password: "christophe2026", role: "employee", name: "CHRISTOPHE", personKey: "CHRISTOPHE" },
-  "claude": { password: "claude2026", role: "employee", name: "CLAUDE", personKey: "CLAUDE" }
+  "thierry": { password: "thierry2026", role: "super-admin", name: "PLATEROTI Thierry", personKey: "PLATEROTI", firstLogin: true },
+  "vincent": { password: "vincent2026", role: "super-admin", name: "ETIEN Vincent", personKey: "ETIEN", firstLogin: true },
+  "schenck": { password: "schenck2026", role: "employee", name: "SCHENCK", personKey: "SCHENCK", firstLogin: true },
+  "callea": { password: "callea2026", role: "employee", name: "CALLEA", personKey: "CALLEA", firstLogin: true },
+  "dautel": { password: "dautel2026", role: "employee", name: "DAUTEL", personKey: "DAUTEL", firstLogin: true },
+  "grimaud": { password: "grimaud2026", role: "employee", name: "GRIMAUD", personKey: "GRIMAUD", firstLogin: true },
+  "gilles": { password: "gilles2026", role: "employee", name: "GILLES", personKey: "GILLES", firstLogin: true },
+  "zimmermann": { password: "zimmermann2026", role: "employee", name: "ZIMMERMANN", personKey: "ZIMMERMANN", firstLogin: true },
+  "rabetge": { password: "rabetge2026", role: "employee", name: "RABETGE", personKey: "RABETGE", firstLogin: true },
+  "klein": { password: "klein2026", role: "employee", name: "KLEIN", personKey: "KLEIN", firstLogin: true },
+  "debs": { password: "debs2026", role: "employee", name: "DEBS", personKey: "DEBS", firstLogin: true },
+  "vaubourg": { password: "vaubourg2026", role: "employee", name: "VAUBOURG", personKey: "VAUBOURG", firstLogin: true },
+  "martel": { password: "martel2026", role: "employee", name: "MARTEL", personKey: "MARTEL", firstLogin: true },
+  "dalmas": { password: "dalmas2026", role: "employee", name: "DALMAS", personKey: "DALMAS", firstLogin: true },
+  "christophe": { password: "christophe2026", role: "employee", name: "CHRISTOPHE", personKey: "CHRISTOPHE", firstLogin: true },
+  "claude": { password: "claude2026", role: "employee", name: "CLAUDE", personKey: "CLAUDE", firstLogin: true }
 };
 
-/* ── STATIC DATA ─────────────────────────────────── */
-const INITIAL_DATA = {
-  "PLATEROTI Thierry": { id:"R457", CA:["2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21","2026-08-22","2026-08-23","2026-08-24","2026-08-25","2026-08-26","2026-08-27","2026-08-28","2026-12-29","2026-12-30","2026-12-31"], JRTT:[], CET:[] },
-  "ETIEN Vincent": { id:"R999", CA:[], JRTT:[], CET:[] },
-  "SCHENCK":    { id:"R458", CA:[], JRTT:["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-02-13","2026-02-27","2026-03-13","2026-03-20","2026-04-30","2026-05-07"], CET:["2026-04-20","2026-04-21","2026-04-22","2026-04-23","2026-04-24"] },
-  "CALLEA":     { id:"R459", CA:["2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-04-20","2026-04-21","2026-08-10","2026-08-11","2026-08-12","2026-08-13","2026-08-14","2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21"], JRTT:["2026-04-22","2026-04-23","2026-04-24"], CET:["2026-03-09","2026-03-10","2026-03-11","2026-03-12","2026-03-13"] },
-  "DAUTEL":     { id:"R461", CA:["2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-08-10","2026-08-11","2026-08-12","2026-08-13","2026-08-14","2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21"], JRTT:[], CET:["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-03-20","2026-03-27","2026-04-10","2026-04-17","2026-04-24"] },
-  "GRIMAUD":    { id:"R463", CA:["2026-06-11","2026-06-12","2026-06-15","2026-06-16","2026-07-13","2026-07-15","2026-07-16","2026-07-17","2026-08-10","2026-08-11","2026-08-12","2026-08-13","2026-08-14","2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21","2026-11-16","2026-11-17","2026-11-18","2026-11-19","2026-11-20","2026-12-24"], JRTT:["2026-04-07","2026-04-08","2026-04-09","2026-04-10","2026-05-11","2026-05-12","2026-05-13","2026-05-15","2026-05-18","2026-09-07","2026-09-08","2026-09-09","2026-09-10","2026-09-11","2026-12-07","2026-12-08","2026-12-09","2026-12-10","2026-12-11","2026-12-23","2026-12-28","2026-12-29","2026-12-30","2026-12-31"], CET:["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-04-03","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"] },
-  "GILLES":     { id:"R464", CA:["2026-02-16","2026-02-17","2026-07-09","2026-07-10","2026-07-13","2026-07-15","2026-07-16","2026-07-17","2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-07-24"], JRTT:["2026-02-06","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-03-06","2026-03-13","2026-03-27","2026-04-13","2026-04-14","2026-04-15","2026-04-16","2026-04-17","2026-04-24","2026-05-15","2026-05-29","2026-06-01","2026-06-03","2026-07-03","2026-07-06","2026-07-07","2026-07-08","2026-08-07","2026-08-14","2026-08-17","2026-08-21","2026-08-28","2026-09-11","2026-09-25","2026-10-05","2026-10-16","2026-10-23"], CET:["2026-03-09","2026-05-04","2026-06-09","2026-06-10","2026-07-02","2026-08-31","2026-09-01","2026-09-02"] },
-  "ZIMMERMANN": { id:"R465", CA:[], JRTT:["2026-02-02","2026-02-27","2026-03-06","2026-03-13","2026-04-02","2026-04-24","2026-04-30","2026-05-04","2026-05-15","2026-06-15","2026-06-29","2026-07-02"], CET:["2026-01-23","2026-05-07","2026-07-03"] },
-  "RABETGE":    { id:"R466", CA:[], JRTT:["2026-02-20","2026-02-25","2026-02-26","2026-02-27","2026-03-13","2026-04-24","2026-04-28","2026-04-29","2026-04-30","2026-05-07","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10"], CET:["2026-01-26","2026-01-27","2026-01-28","2026-04-20","2026-04-21","2026-04-22"] },
-  "KLEIN":      { id:"R468", CA:[], JRTT:["2026-02-16","2026-02-17","2026-02-25","2026-02-26","2026-02-27","2026-03-13","2026-04-16","2026-04-17","2026-04-20","2026-04-21","2026-04-22","2026-06-08","2026-06-22","2026-07-03","2026-07-10","2026-07-11","2026-07-12","2026-07-13","2026-07-15","2026-07-16","2026-07-17","2026-09-11","2026-09-28","2026-10-21","2026-10-22","2026-10-23","2026-10-26","2026-10-27","2026-10-28","2026-11-09","2026-11-23","2026-12-11","2026-12-28","2026-12-29","2026-12-30","2026-12-31","2027-01-01"], CET:["2026-03-09","2026-03-10","2026-05-04","2026-05-05","2026-05-06","2026-05-26","2026-06-29","2026-06-30","2026-07-01","2026-07-02","2026-10-14","2026-10-15","2026-10-16","2026-10-29","2026-10-30","2027-01-04","2027-01-05","2027-01-06"] },
-  "DEBS":       { id:"R469", CA:["2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-07-03","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10","2026-07-13","2026-07-15","2026-07-16","2026-07-17","2026-08-13","2026-08-14"], JRTT:["2026-01-19","2026-02-06","2026-02-12","2026-02-13","2026-02-23","2026-03-05","2026-03-06","2026-03-13","2026-03-20","2026-04-07","2026-04-08","2026-04-09","2026-04-10","2026-04-27","2026-05-06","2026-05-07","2026-05-15","2026-05-29","2026-06-05","2026-06-08","2026-06-09","2026-06-15","2026-06-29","2026-07-02","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07","2026-08-10","2026-08-11","2026-08-12","2026-08-31","2026-09-01","2026-09-14","2026-09-25","2026-10-02","2026-10-09","2026-10-16","2026-10-23"], CET:[] },
-  "VAUBOURG":   { id:"R470", CA:["2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07","2026-08-10","2026-08-11","2026-08-12","2026-08-13","2026-08-14","2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21"], JRTT:["2026-01-19","2026-01-30","2026-02-02","2026-02-13","2026-02-16","2026-02-23","2026-03-09","2026-03-13","2026-03-16","2026-03-27","2026-04-17","2026-04-20","2026-05-05","2026-05-06","2026-05-07","2026-05-15","2026-05-18","2026-06-05","2026-06-08","2026-06-18","2026-06-19","2026-06-22","2026-07-03","2026-07-13","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31","2026-08-24","2026-08-25"], CET:[] },
-  "MARTEL":     { id:"R471", CA:[], JRTT:["2026-01-23","2026-02-13","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-27","2026-04-07","2026-04-08","2026-04-13","2026-04-14","2026-04-15","2026-04-16","2026-04-17"], CET:[] },
-  "DALMAS":     { id:"R472", CA:["2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-07-24","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"], JRTT:["2026-02-09","2026-02-13","2026-02-20","2026-03-06","2026-03-13","2026-03-27","2026-04-10","2026-04-17","2026-04-30","2026-05-07","2026-05-15","2026-05-18","2026-05-29","2026-06-05","2026-06-12"], CET:["2026-05-04","2026-05-05","2026-05-06","2026-06-15","2026-06-16","2026-06-17"] },
-  "CHRISTOPHE": { id:"R473", CA:[], JRTT:["2026-03-06","2026-03-09","2026-05-11","2026-05-12","2026-05-13","2026-05-15"], CET:["2026-03-11","2026-03-12","2026-03-13","2026-04-30","2026-05-04","2026-05-05","2026-05-06","2026-05-07"] },
-  "CLAUDE":     { id:"R474", CA:["2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-07-24","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31","2026-08-26","2026-08-27","2026-08-28"], JRTT:["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"], CET:["2026-03-16","2026-03-17","2026-03-18","2026-03-19","2026-03-20","2026-05-11","2026-05-12","2026-05-13","2026-05-15","2026-05-18"] }
+const TYPE_CONFIG = {
+  "CA": { label: "Congé Annuel", color: "#ef4444", allUsersCanEdit: false },
+  "JRTT": { label: "JRTT", color: "#22c55e", allUsersCanEdit: true },
+  "CET": { label: "CET", color: "#eab308", allUsersCanEdit: true }
 };
 
-const PERSONS = Object.keys(INITIAL_DATA).sort();
-const MONTHS_FR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-const DAYS_S    = ["Lu","Ma","Me","Je","Ve","Sa","Di"];
+let currentUser = null, currentUsername = null, curYear = 2026, curMonth = 0;
+let data = {
+  "PLATEROTI": { id:"R457", CA:[], JRTT:[], CET:[] },
+  "ETIEN": { id:"R999", CA:[], JRTT:[], CET:[] },
+  "SCHENCK": { id:"R458", CA:[], JRTT:[], CET:[] },
+  "CALLEA": { id:"R459", CA:[], JRTT:[], CET:[] },
+  "DAUTEL": { id:"R461", CA:[], JRTT:[], CET:[] },
+  "GRIMAUD": { id:"R463", CA:[], JRTT:[], CET:[] },
+  "GILLES": { id:"R464", CA:[], JRTT:[], CET:[] },
+  "ZIMMERMANN": { id:"R465", CA:[], JRTT:[], CET:[] },
+  "RABETGE": { id:"R466", CA:[], JRTT:[], CET:[] },
+  "KLEIN": { id:"R468", CA:[], JRTT:[], CET:[] },
+  "DEBS": { id:"R469", CA:[], JRTT:[], CET:[] },
+  "VAUBOURG": { id:"R470", CA:[], JRTT:[], CET:[] },
+  "MARTEL": { id:"R471", CA:[], JRTT:[], CET:[] },
+  "DALMAS": { id:"R472", CA:[], JRTT:[], CET:[] },
+  "CHRISTOPHE": { id:"R473", CA:[], JRTT:[], CET:[] },
+  "CLAUDE": { id:"R474", CA:[], JRTT:[], CET:[] }
+};
+let pendingEventDate = null, pendingDeleteEvent = null;
 
-/* ── STATE ─────────────────────────────────────────── */
-let currentUser = null;
-let data          = JSON.parse(JSON.stringify(INITIAL_DATA));
-let activePersons = new Set(PERSONS);
-let activeTypes   = new Set(["CA","JRTT","CET"]);
-let extraEvents   = [];
-let curYear       = 2026;
-let curMonth      = 0;
-let curView       = "month";
-let dlSelected    = new Set(PERSONS);
-let pendingEventDate = null;
-let pendingDeleteEvent = null;
+window.checkPasswordStrength = () => {
+  const pwd = document.getElementById("newPassword").value;
+  const fill = document.getElementById("pwdStrengthFill");
+  const btn = document.getElementById("changePwdBtn");
+  const hasLength = pwd.length >= 8, hasUpper = /[A-Z]/.test(pwd), hasNumber = /[0-9]/.test(pwd);
+  document.getElementById("req-length").classList.toggle("valid", hasLength);
+  document.getElementById("req-uppercase").classList.toggle("valid", hasUpper);
+  document.getElementById("req-number").classList.toggle("valid", hasNumber);
+  const strength = [hasLength, hasUpper, hasNumber].filter(Boolean).length;
+  fill.className = "pwd-strength-fill";
+  if (strength === 1) fill.classList.add("weak");
+  else if (strength === 2) fill.classList.add("medium");
+  else if (strength === 3) fill.classList.add("strong");
+  btn.disabled = strength < 3;
+};
 
-/* ── LOGIN ─────────────────────────────────────────── */
+window.checkMyPasswordStrength = () => {
+  const pwd = document.getElementById("myNewPassword").value;
+  const fill = document.getElementById("myPwdStrengthFill");
+  const btn = document.getElementById("changeMyPwdBtn");
+  const hasLength = pwd.length >= 8, hasUpper = /[A-Z]/.test(pwd), hasNumber = /[0-9]/.test(pwd);
+  document.getElementById("my-req-length").classList.toggle("valid", hasLength);
+  document.getElementById("my-req-uppercase").classList.toggle("valid", hasUpper);
+  document.getElementById("my-req-number").classList.toggle("valid", hasNumber);
+  const strength = [hasLength, hasUpper, hasNumber].filter(Boolean).length;
+  fill.className = "pwd-strength-fill";
+  if (strength === 1) fill.classList.add("weak");
+  else if (strength === 2) fill.classList.add("medium");
+  else if (strength === 3) fill.classList.add("strong");
+  btn.disabled = strength < 3;
+};
+
 window.handleLogin = (e) => {
   e.preventDefault();
   const username = document.getElementById("loginUsername").value.toLowerCase().trim();
   const password = document.getElementById("loginPassword").value;
-  
   if (USERS[username] && USERS[username].password === password) {
+    currentUsername = username;
     currentUser = USERS[username];
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("mainApp").style.display = "block";
-    
-    // Update UI for role
-    const badge = document.getElementById("userBadge");
-    badge.textContent = currentUser.name;
-    badge.className = currentUser.role === "admin" ? "user-badge admin" : "user-badge";
-    
-    // Show/hide admin features
-    document.querySelectorAll(".admin-only").forEach(el => {
-      el.style.display = currentUser.role === "admin" ? "" : "none";
-    });
-    
-    // Set active persons based on role
-    if (currentUser.role === "employee") {
-      activePersons = new Set([currentUser.personKey]);
+    if (currentUser.firstLogin) {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("changePasswordForm").style.display = "block";
+      document.getElementById("loginSubtitle").textContent = "Première connexion - Changement de mot de passe obligatoire";
+      document.getElementById("loginInfo").textContent = "Vous devez créer votre mot de passe personnel pour continuer.";
+      document.getElementById("loginInfo").classList.add("show");
+    } else {
+      completeLogin();
     }
-    
-    initFirebase();
   } else {
     document.getElementById("loginError").classList.add("show");
-    setTimeout(() => {
-      document.getElementById("loginError").classList.remove("show");
-    }, 3000);
+    setTimeout(() => document.getElementById("loginError").classList.remove("show"), 3000);
   }
 };
 
-window.logout = () => {
-  currentUser = null;
-  document.getElementById("loginPage").style.display = "flex";
-  document.getElementById("mainApp").style.display = "none";
-  document.getElementById("loginForm").reset();
+window.handleChangePassword = (e) => {
+  e.preventDefault();
+  const newPwd = document.getElementById("newPassword").value;
+  const confirmPwd = document.getElementById("confirmPassword").value;
+  if (newPwd !== confirmPwd) return alert("Les mots de passe ne correspondent pas");
+  USERS[currentUsername].password = newPwd;
+  if (!USERS[currentUsername].securityQuestions) {
+    document.getElementById("changePasswordForm").style.display = "none";
+    document.getElementById("securityQuestionsForm").style.display = "block";
+    document.getElementById("loginSubtitle").textContent = "Configuration des questions de sécurité";
+    document.getElementById("loginInfo").textContent = "Définissez 2 questions de sécurité pour sécuriser votre compte.";
+  } else {
+    USERS[currentUsername].firstLogin = false;
+    completeLogin();
+  }
 };
 
-/* ── FIREBASE INIT ─────────────────────────────────── */
-async function initFirebase() {
-  setPill("loading","Connexion…");
-  try {
-    const col  = collection(db,"jrtt");
-    const snap = await getDocs(col);
-    if (snap.empty) {
-      setPill("loading","Initialisation…");
-      for (const [nom,d] of Object.entries(INITIAL_DATA)) {
-        await setDoc(doc(db,"jrtt",nom),{ CA:d.CA, JRTT:d.JRTT, CET:d.CET });
-      }
-    } else {
-      snap.forEach(d => {
-        const nom = d.id;
-        if (data[nom]) { data[nom].CA = d.data().CA||[]; data[nom].JRTT = d.data().JRTT||[]; data[nom].CET = d.data().CET||[]; }
-      });
-    }
-    setPill("ok","Synchronisé ✓");
-    onSnapshot(col, ss => {
-      ss.forEach(d => { if(data[d.id]){ data[d.id].CA=d.data().CA||[]; data[d.id].JRTT=d.data().JRTT||[]; data[d.id].CET=d.data().CET||[]; } });
-      render();
-    });
-  } catch(e) {
-    console.error(e);
-    setPill("error","Mode local");
-  }
+window.handleSetupSecurityQuestions = (e) => {
+  e.preventDefault();
+  const q1 = document.getElementById("secQ1").value, a1 = document.getElementById("secA1").value.toLowerCase().trim();
+  const q2 = document.getElementById("secQ2").value, a2 = document.getElementById("secA2").value.toLowerCase().trim();
+  if (q1 === q2) return alert("Veuillez choisir deux questions différentes");
+  USERS[currentUsername].securityQuestions = [{ question: q1, answer: a1 }, { question: q2, answer: a2 }];
+  USERS[currentUsername].firstLogin = false;
+  completeLogin();
+};
+
+window.handleChangeMyPassword = (e) => {
+  e.preventDefault();
+  const currentPwd = document.getElementById("currentPassword").value;
+  const newPwd = document.getElementById("myNewPassword").value;
+  const confirmPwd = document.getElementById("myConfirmPassword").value;
+  if (currentPwd !== USERS[currentUsername].password) return alert("Mot de passe actuel incorrect");
+  if (newPwd !== confirmPwd) return alert("Les nouveaux mots de passe ne correspondent pas");
+  USERS[currentUsername].password = newPwd;
+  alert("Mot de passe modifié avec succès !");
+  hideModal("changeMyPasswordModal");
+  document.getElementById("changeMyPasswordForm").reset();
+};
+
+function completeLogin() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("mainApp").style.display = "block";
+  const badge = document.getElementById("userBadge");
+  badge.textContent = currentUser.name;
+  badge.className = currentUser.role === "super-admin" ? "user-badge super-admin" : "user-badge";
+  document.querySelectorAll(".super-admin-only").forEach(el => el.style.display = currentUser.role === "super-admin" ? "" : "none");
   buildSidebar();
   render();
 }
 
-function setPill(cls,txt){ const p=document.getElementById("syncPill"); p.className="sync-pill "+cls; p.textContent=txt; }
-
-/* ── SIDEBAR BUILD ─────────────────────────────────── */
-function buildSidebar() {
-  // Type legend
-  const leg = document.getElementById("typeLegend");
-  leg.innerHTML = "";
-  const typeDefs = [
-    {t:"CA",   label:"Congé Annuel"},
-    {t:"JRTT", label:"JRTT"},
-    {t:"CET",  label:"CET"},
-    {t:"VAC",  label:"Vac. Scolaires"},
-    {t:"JF",   label:"Jour Férié"},
-  ];
-  typeDefs.forEach(({t,label}) => {
-    const cnt = getAllEventsFlat().filter(e=>e.type===t).length;
-    const el = document.createElement("div");
-    el.className = `type-pill tp-${t} ${activeTypes.has(t)?"":" off"}`;
-    el.innerHTML = `<div class="type-pill-dot dot-${t}"></div><span>${label}</span><span class="type-pill-count">${cnt}j</span>`;
-    el.onclick = () => { activeTypes.has(t)?activeTypes.delete(t):activeTypes.add(t); buildSidebar(); render(); };
-    leg.appendChild(el);
-  });
-
-  // Person list
-  const list = document.getElementById("personList");
-  const st   = list.scrollTop;
-  list.innerHTML = "";
-  
-  const personsToShow = currentUser.role === "admin" ? PERSONS : [currentUser.personKey];
-  
-  personsToShow.forEach(nom => {
-    const d    = data[nom];
-    if (!d) return;
-    const total= (d.CA.length + d.JRTT.length + d.CET.length);
-    const key  = nom.split(" ")[0];
-    const el   = document.createElement("div");
-    el.className = "person-row" + (activePersons.has(nom)?"":" off");
-    el.innerHTML = `<div class="pdot pdot-${key}"></div><span class="pname">${nom}</span><span class="pid">${d.id}</span>`;
-    
-    if (currentUser.role === "admin") {
-      el.onclick = () => { activePersons.has(nom)?activePersons.delete(nom):activePersons.add(nom); buildSidebar(); render(); };
-    }
-    
-    list.appendChild(el);
-  });
-  list.scrollTop = st;
-}
-
-window.selectAllPersons  = () => { if(currentUser.role==="admin") { PERSONS.forEach(p=>activePersons.add(p)); buildSidebar(); render(); } };
-window.selectNonePersons = () => { if(currentUser.role==="admin") { activePersons.clear(); buildSidebar(); render(); } };
-
-/* ── HELPERS ─────────────────────────────────────── */
-function getAllEventsFlat() {
-  const out = [];
-  PERSONS.forEach(nom => {
-    if (!activePersons.has(nom)) return;
-    const d = data[nom];
-    if (!d) return;
-    const key = nom.split(" ")[0];
-    ["CA","JRTT","CET"].forEach(t => {
-      if (!activeTypes.has(t)) return;
-      (d[t]||[]).forEach(date => out.push({person:nom, key, date, type:t, id:d.id}));
-    });
-  });
-  if (activeTypes.has("VAC") || activeTypes.has("JF")) {
-    extraEvents.forEach(e => { if (activeTypes.has(e.type)) out.push(e); });
-  }
-  return out;
-}
-
-function buildDateIndex() {
-  const idx = {};
-  getAllEventsFlat().forEach(e => { if(!idx[e.date]) idx[e.date]=[]; idx[e.date].push(e); });
-  return idx;
-}
-
-function fmtDate(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function getWeek(d) {
-  const dt = new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-  const day = dt.getUTCDay()||7; dt.setUTCDate(dt.getUTCDate()+4-day);
-  const y1  = new Date(Date.UTC(dt.getUTCFullYear(),0,1));
-  return Math.ceil((((dt-y1)/86400000)+1)/7);
-}
-
-function addDays(d,n) { const r=new Date(d); r.setDate(r.getDate()+n); return r; }
-
-function frDate(d) {
-  return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
-}
-
-/* ── NAVIGATION ─────────────────────────────────── */
-window.prevMonth = () => { curMonth--; if(curMonth<0){curMonth=11;curYear--;} render(); };
-window.nextMonth = () => { curMonth++; if(curMonth>11){curMonth=0;curYear++;} render(); };
-window.prevYear  = () => { curYear--; render(); };
-window.nextYear  = () => { curYear++; render(); };
-window.goToday   = () => { const n=new Date(); curYear=n.getFullYear(); curMonth=n.getMonth(); render(); };
-
-window.setView = (v) => {
-  curView = v;
-  document.querySelectorAll(".vtab").forEach(t=>t.classList.remove("active"));
-  document.getElementById("vtab-"+v).classList.add("active");
-  render();
+window.logout = () => {
+  currentUser = null;
+  currentUsername = null;
+  document.getElementById("loginPage").style.display = "flex";
+  document.getElementById("mainApp").style.display = "none";
+  document.getElementById("loginForm").reset();
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("changePasswordForm").style.display = "none";
+  document.getElementById("securityQuestionsForm").style.display = "none";
+  document.getElementById("loginSubtitle").textContent = "Connectez-vous pour accéder à votre planning";
+  document.getElementById("loginInfo").classList.remove("show");
 };
 
-/* ── EVENT MANAGEMENT ─────────────────────────────── */
+function fmtDate(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function frDate(d) { return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`; }
+function getWeek(d) { const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())); const day=dt.getUTCDay()||7; dt.setUTCDate(dt.getUTCDate()+4-day); const y1=new Date(Date.UTC(dt.getUTCFullYear(),0,1)); return Math.ceil((((dt-y1)/86400000)+1)/7); }
+
+function buildSidebar() {
+  const leg = document.getElementById("typeLegend");
+  leg.innerHTML = "";
+  Object.keys(TYPE_CONFIG).forEach(typeKey => {
+    const config = TYPE_CONFIG[typeKey];
+    const el = document.createElement("div");
+    el.className = "type-pill";
+    el.style.background = `${config.color}1a`;
+    el.style.color = config.color;
+    el.style.borderColor = `${config.color}55`;
+    el.innerHTML = `<div class="type-pill-dot" style="background:${config.color}"></div><span>${config.label}</span>`;
+    leg.appendChild(el);
+  });
+}
+
+function render() {
+  const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  document.getElementById("monthTitle").textContent = `${months[curMonth]} ${curYear}`;
+  const firstDay = new Date(curYear, curMonth, 1);
+  const lastDay = new Date(curYear, curMonth+1, 0);
+  let startDow = firstDay.getDay()-1; if(startDow<0) startDow=6;
+  const totalCells = Math.ceil((startDow+lastDay.getDate())/7)*7;
+  const todayStr = fmtDate(new Date());
+  let html = `<div class="cal-wrap"><div class="cal-head-row"><div class="cal-head-cell"></div>`;
+  ["Lu","Ma","Me","Je","Ve","Sa","Di"].forEach(d => html += `<div class="cal-head-cell">${d}</div>`);
+  html += `</div><div class="cal-body">`;
+  const cursor = new Date(curYear, curMonth, 1-startDow);
+  for (let i=0; i<totalCells; i++) {
+    if (i%7===0) html += `<div class="wnum">S${getWeek(cursor)}</div>`;
+    const ds = fmtDate(cursor);
+    const inM = cursor.getMonth()===curMonth && cursor.getFullYear()===curYear;
+    const dow = cursor.getDay();
+    const isWE = dow===0||dow===6;
+    const isTod = ds===todayStr;
+    const canClick = inM && currentUser && currentUser.role === "employee";
+    const clickAttr = canClick ? `onclick="handleCellClick('${ds}')"` : '';
+    html += `<div class="dcell${!inM?" other":""}${isWE?" wkend":""}${isTod?" todaycell":""}${canClick?" clickable":""}" ${clickAttr}>`;
+    html += `<div class="dnum">${cursor.getDate()}</div><div class="tags">`;
+    
+    const personKey = currentUser.personKey;
+    if (data[personKey]) {
+      Object.keys(TYPE_CONFIG).forEach(typeKey => {
+        if (data[personKey][typeKey] && data[personKey][typeKey].includes(ds)) {
+          const config = TYPE_CONFIG[typeKey];
+          html += `<div class="etag" style="background:${config.color}1a;color:${config.color};border-color:${config.color}">${typeKey}</div>`;
+        }
+      });
+    }
+    
+    html += `</div></div>`;
+    cursor.setDate(cursor.getDate()+1);
+  }
+  html += `</div></div>`;
+  document.getElementById("calScroll").innerHTML = html;
+}
+
+function canUserEditType(typeKey) {
+  if (currentUser.role === "super-admin") return true;
+  if (TYPE_CONFIG[typeKey] && TYPE_CONFIG[typeKey].allUsersCanEdit) return true;
+  return false;
+}
+
 window.handleCellClick = (dateStr) => {
-  const idx = buildDateIndex();
-  const existing = (idx[dateStr] || []).filter(e => 
-    e.person === currentUser.personKey && ["CA","JRTT","CET"].includes(e.type)
-  );
+  if (!currentUser.personKey) return;
+  const personKey = currentUser.personKey;
   
-  if (existing.length > 0) {
-    // Delete
-    pendingDeleteEvent = { date: dateStr, event: existing[0] };
-    document.getElementById("deleteEventInfo").textContent = 
-      `Supprimer ${existing[0].type} le ${frDate(new Date(dateStr))} ?`;
+  let existingType = null;
+  Object.keys(TYPE_CONFIG).forEach(typeKey => {
+    if (data[personKey][typeKey] && data[personKey][typeKey].includes(dateStr)) {
+      existingType = typeKey;
+    }
+  });
+  
+  if (existingType) {
+    if (!canUserEditType(existingType)) return alert("Vous n'avez pas la permission de modifier ce type");
+    pendingDeleteEvent = { date: dateStr, type: existingType };
+    document.getElementById("deleteEventInfo").textContent = `Supprimer ${existingType} le ${frDate(new Date(dateStr))} ?`;
     showModal("deleteEventModal");
   } else {
-    // Add
+    const typeSelect = document.getElementById("addEventType");
+    typeSelect.innerHTML = "";
+    Object.keys(TYPE_CONFIG).forEach(typeKey => {
+      if (canUserEditType(typeKey)) {
+        const config = TYPE_CONFIG[typeKey];
+        const option = document.createElement("option");
+        option.value = typeKey;
+        option.textContent = `${config.label} (${typeKey})`;
+        typeSelect.appendChild(option);
+      }
+    });
+    if (typeSelect.options.length === 0) return alert("Aucun type disponible");
     pendingEventDate = dateStr;
     document.getElementById("addEventDate").textContent = `Date : ${frDate(new Date(dateStr))}`;
     showModal("addEventModal");
   }
 };
 
-window.confirmAddEvent = async () => {
+window.confirmAddEvent = () => {
   const type = document.getElementById("addEventType").value;
   const personKey = currentUser.personKey;
-  
+  if (!canUserEditType(type)) return alert("Permission refusée");
+  if (!data[personKey][type]) data[personKey][type] = [];
   if (!data[personKey][type].includes(pendingEventDate)) {
     data[personKey][type].push(pendingEventDate);
     data[personKey][type].sort();
-    
-    try {
-      await setDoc(doc(db, "jrtt", personKey), {
-        CA: data[personKey].CA,
-        JRTT: data[personKey].JRTT,
-        CET: data[personKey].CET
-      });
-    } catch(e) {
-      console.error(e);
-    }
   }
-  
   hideModal("addEventModal");
   render();
 };
 
-window.confirmDeleteEvent = async () => {
-  const { date, event } = pendingDeleteEvent;
+window.confirmDeleteEvent = () => {
+  const { date, type } = pendingDeleteEvent;
   const personKey = currentUser.personKey;
-  
-  data[personKey][event.type] = data[personKey][event.type].filter(d => d !== date);
-  
-  try {
-    await setDoc(doc(db, "jrtt", personKey), {
-      CA: data[personKey].CA,
-      JRTT: data[personKey].JRTT,
-      CET: data[personKey].CET
-    });
-  } catch(e) {
-    console.error(e);
-  }
-  
+  if (!canUserEditType(type)) return alert("Permission refusée");
+  data[personKey][type] = data[personKey][type].filter(d => d !== date);
   hideModal("deleteEventModal");
   render();
 };
 
-/* ── MAIN RENDER ─────────────────────────────────── */
-function render() {
-  document.getElementById("monthTitle").textContent = `${MONTHS_FR[curMonth]} ${curYear}`;
-  const idx = buildDateIndex();
-  const scroll = document.getElementById("calScroll");
-
-  if      (curView==="month") renderMonth(scroll, idx);
-  else if (curView==="list")  renderList(scroll, idx);
-  else if (curView==="grid")  renderGrid(scroll, idx);
-
-  // Count badge
-  const all = getAllEventsFlat();
-  const thisMonth = all.filter(e=>{
-    const d=new Date(e.date); return d.getFullYear()===curYear && d.getMonth()===curMonth;
-  });
-  document.getElementById("countBadge").textContent = `${thisMonth.length} jours ce mois`;
-
-  // PDF modal info
-  if (currentUser && currentUser.role === "admin") {
-    updatePDFInfo();
-  }
-}
-
-/* ── MONTH VIEW ─────────────────────────────────── */
-function renderMonth(container, idx) {
-  const firstDay = new Date(curYear, curMonth, 1);
-  const lastDay  = new Date(curYear, curMonth+1, 0);
-  let startDow = firstDay.getDay()-1; if(startDow<0) startDow=6;
-  const totalCells = Math.ceil((startDow+lastDay.getDate())/7)*7;
-  const todayStr = fmtDate(new Date());
-
-  let html = `<div class="cal-wrap">
-    <div class="cal-head-row">
-      <div class="cal-head-cell cal-head-empty"></div>
-      ${DAYS_S.map(d=>`<div class="cal-head-cell">${d}</div>`).join("")}
-    </div>
-    <div class="cal-body">`;
-
-  const cursor = new Date(curYear, curMonth, 1-startDow);
-  for (let i=0; i<totalCells; i++) {
-    if (i%7===0) html += `<div class="wnum">S${getWeek(cursor)}</div>`;
-    const ds    = fmtDate(cursor);
-    const inM   = cursor.getMonth()===curMonth && cursor.getFullYear()===curYear;
-    const dow   = cursor.getDay();
-    const isWE  = dow===0||dow===6;
-    const isTod = ds===todayStr;
-    const events= idx[ds]||[];
-    
-    const canClick = inM && currentUser && currentUser.role === "employee";
-    const clickAttr = canClick ? `onclick="handleCellClick('${ds}')"` : '';
-    const clickClass = canClick ? ' clickable' : '';
-
-    html += `<div class="dcell${!inM?" other":""}${isWE?" wkend":""}${isTod?" todaycell":""}${clickClass}" ${clickAttr}>`;
-    html += `<div class="dnum">${cursor.getDate()}</div><div class="tags">`;
-
-    const show = events.slice(0,4);
-    show.forEach(ev => {
-      const label = ev.type==="VAC"||ev.type==="JF" ? `${ev.type} ${(ev.label||"").slice(0,10)}` : `${ev.type} ${ev.key||ev.person.split(" ")[0]}`;
-      const cls   = ev.type==="VAC"||ev.type==="JF" ? `bg-${ev.type}` : `bg-${ev.key||ev.person.split(" ")[0]}`;
-      html += `<div class="etag ${cls}" title="${ev.person} — ${ev.type} — ${ds}">${label}</div>`;
-    });
-    if (events.length>4) html += `<div style="font-size:.6rem;color:#94a3b8;margin-top:1px">+${events.length-4}</div>`;
-    html += `</div></div>`;
-    cursor.setDate(cursor.getDate()+1);
-  }
-  html += `</div></div>`;
-  container.innerHTML = html;
-}
-
-/* ── LIST VIEW ─────────────────────────────────── */
-function renderList(container, idx) {
-  const all = getAllEventsFlat().sort((a,b)=>a.date.localeCompare(b.date));
-  const thisM = all.filter(e=>{
-    const d=new Date(e.date); return d.getFullYear()===curYear && d.getMonth()===curMonth;
-  });
-
-  const rows = thisM.map(ev => {
-    const d  = new Date(ev.date);
-    const dn = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"][d.getDay()];
-    const cls = ev.type==="VAC"||ev.type==="JF" ? `bg-${ev.type}` : `bg-${ev.key||ev.person.split(" ")[0]}`;
-    return `<tr>
-      <td><span class="etag ${cls}" style="display:inline-block">${ev.type}</span></td>
-      <td style="font-weight:700">${ev.person}</td>
-      <td style="color:#64748b">${ev.id||""}</td>
-      <td>${frDate(d)}</td>
-      <td style="color:#94a3b8">${dn}</td>
-    </tr>`;
-  }).join("");
-
-  container.innerHTML = `<div class="list-wrap">
-    <table class="list-table">
-      <thead><tr><th>Type</th><th>Collaborateur</th><th>Réf.</th><th>Date</th><th>Jour</th></tr></thead>
-      <tbody>${rows||`<tr><td colspan="5" style="text-align:center;padding:24px;color:#94a3b8">Aucun événement ce mois</td></tr>`}</tbody>
-    </table></div>`;
-}
-
-/* ── GRID VIEW ─────────────────────────────────── */
-function renderGrid(container, idx) {
-  const firstDay = new Date(curYear, curMonth, 1);
-  const lastDay  = new Date(curYear, curMonth+1, 0);
-  const days = [];
-  for (let d=new Date(firstDay); d<=lastDay; d=addDays(d,1)) days.push(new Date(d));
-
-  const activePArr = [...activePersons].sort();
-
-  const headerCells = days.map(d => {
-    const isWE = d.getDay()===0||d.getDay()===6;
-    const dn   = ["Di","Lu","Ma","Me","Je","Ve","Sa"][d.getDay()];
-    return `<th style="${isWE?"background:#22253a":""}" title="${frDate(d)}">${dn}<br><span style="font-weight:400;opacity:.7">${d.getDate()}</span></th>`;
-  }).join("");
-
-  const rows = activePArr.map(nom => {
-    const d   = data[nom];
-    if (!d) return '';
-    const key = nom.split(" ")[0];
-    const cells = days.map(day => {
-      const ds   = fmtDate(day);
-      const evs  = (idx[ds]||[]).filter(e=>(e.person===nom)||(e.person===undefined&&(e.type==="VAC"||e.type==="JF")));
-      const isWE = day.getDay()===0||day.getDay()===6;
-      if (!evs.length) return `<td${isWE?' class="gcell-wkend"':''}></td>`;
-      const ev  = evs[0];
-      const cls = ev.type==="VAC"||ev.type==="JF" ? `bg-${ev.type}` : `bg-${key}`;
-      return `<td${isWE?' class="gcell-wkend"':''}><span class="gcell ${cls}">${ev.type}</span></td>`;
-    }).join("");
-    return `<tr><td class="sticky-col">${nom}<br><span style="font-size:.65rem;color:#94a3b8;font-weight:400">${d.id}</span></td>${cells}</tr>`;
-  }).join("");
-
-  container.innerHTML = `<div class="grid-wrap"><table class="grid-table">
-    <thead><tr><th class="sticky-col">Collaborateur</th>${headerCells}</tr></thead>
-    <tbody>${rows}</tbody>
-  </table></div>`;
-}
-
-/* ── IMPORT ICS ─────────────────────────────────── */
-const dz  = document.getElementById("dropZone");
-const fin = document.getElementById("icsFileInput");
-
-dz.addEventListener("dragover",  e=>{e.preventDefault();dz.classList.add("drag");});
-dz.addEventListener("dragleave", ()=>dz.classList.remove("drag"));
-dz.addEventListener("drop",      e=>{e.preventDefault();dz.classList.remove("drag");parseICSFiles(e.dataTransfer.files);});
-fin.addEventListener("change",   e=>parseICSFiles(e.target.files));
-
-function parseICSFiles(files) {
-  let count = 0;
-  const processFile = (file) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const txt = ev.target.result;
-        const evRe = /BEGIN:VEVENT([\s\S]*?)END:VEVENT/g;
-        let m;
-        while ((m=evRe.exec(txt))!==null) {
-          const block = m[1];
-          const dsMatch = block.match(/DTSTART[;:](?:VALUE=DATE:)?(\d{8})/);
-          const ds = dsMatch ? dsMatch[1] : null;
-          const sumMatch = block.match(/SUMMARY:(.+)/);
-          const sum = sumMatch ? sumMatch[1].trim() : "";
-          if (!ds) continue;
-          const date = `${ds.slice(0,4)}-${ds.slice(4,6)}-${ds.slice(6,8)}`;
-          let type = "VAC";
-          if (sum.toLowerCase().includes("férié")||sum.toLowerCase().includes("ferie")||sum.toLowerCase().includes("fête")) type = "JF";
-          extraEvents.push({person:sum, key:type, date, type, label:sum, id:""});
-          count++;
-        }
-        resolve();
-      };
-      reader.readAsText(file, 'UTF-8');
-    });
-  };
-
-  Promise.all(Array.from(files).map(processFile)).then(() => {
-    updateImportNote();
-    buildSidebar();
-    render();
-  });
-  fin.value = "";
-}
-
-function updateImportNote() {
-  const note = document.getElementById("importNote");
-  const txt  = document.getElementById("importNoteText");
-  if (extraEvents.length===0) { note.style.display="none"; return; }
-  note.style.display = "flex";
-  txt.textContent = `${extraEvents.length} événement(s) importé(s) — Vacances & Jours fériés`;
-}
-
-window.clearImports = () => { extraEvents=[]; updateImportNote(); activeTypes.delete("VAC"); activeTypes.delete("JF"); buildSidebar(); render(); };
-
-/* ── PDF EXPORT ─────────────────────────────────── */
-function updatePDFInfo() {
-  const s=document.getElementById("pdfStart")?.value, e=document.getElementById("pdfEnd")?.value;
-  if (!s||!e) return;
-  const days=Math.round((new Date(e)-new Date(s))/86400000)+1;
-  document.getElementById("pdfInfo").textContent = `Durée : ${days} jours (${Math.round(days/7)} semaines)`;
-  document.getElementById("pdfPersonsInfo").textContent = `${activePersons.size} collaborateurs inclus`;
-}
-
-if (document.getElementById("pdfStart")) {
-  document.getElementById("pdfStart").addEventListener("input", updatePDFInfo);
-  document.getElementById("pdfEnd").addEventListener("input", updatePDFInfo);
-}
-
-window.exportPDF = () => {
-  const startD = new Date(document.getElementById("pdfStart").value);
-  const endD   = new Date(document.getElementById("pdfEnd").value);
-  if (!startD||!endD||startD>endD) return alert("Dates invalides");
-
-  const days = [];
-  for (let d=new Date(startD); d<=endD; d=addDays(d,1)) days.push(new Date(d));
-  const idx = buildDateIndex();
-  const activePArr = [...activePersons].sort();
-
-  const headerCells = days.map(d=>{
-    const isWE=d.getDay()===0||d.getDay()===6;
-    const dn=["Di","Lu","Ma","Me","Je","Ve","Sa"][d.getDay()];
-    return `<th class="${isWE?"we":""}">${dn}<br><span class="ddate">${d.getDate()}/${d.getMonth()+1}</span></th>`;
-  }).join("");
-
-  const rows = activePArr.map(nom=>{
-    const d=data[nom]; 
-    if (!d) return '';
-    const key=nom.split(" ")[0];
-    const cells=days.map(day=>{
-      const ds=fmtDate(day); const isWE=day.getDay()===0||day.getDay()===6;
-      const evs=(idx[ds]||[]).filter(e=>e.person===nom);
-      if(!evs.length) return `<td class="${isWE?"we":""}"></td>`;
-      const ev=evs[0];
-      const colors={CA:"#ef4444",JRTT:"#22c55e",CET:"#eab308",VAC:"#8b5cf6",JF:"#f97316"};
-      const c=colors[ev.type]||"#999";
-      return `<td class="${isWE?"we":""}" style="background:${c}1a"><span style="color:${c};font-weight:800;font-size:8px">${ev.type}</span></td>`;
-    }).join("");
-    return `<tr><td class="nc">${d.id}</td><td class="nc name">${nom}</td>${cells}</tr>`;
-  }).join("");
-
-  const html=`<!DOCTYPE html><html><head><meta charset="utf-8">
-<title>Planning ${frDate(startD)} – ${frDate(endD)}</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;font-size:9px;color:#1a1d2e;background:#fff;padding:8mm}
-.head{margin-bottom:10px}
-h1{font-size:13px;font-weight:800;color:#1a1d2e}
-.sub{font-size:8px;color:#64748b;margin-top:2px}
-table{border-collapse:collapse;width:100%;table-layout:fixed;margin-bottom:8px}
-th{background:#1a1d2e;color:rgba(255,255,255,.8);padding:4px 2px;font-size:7px;font-weight:700;border-right:1px solid #2d2f45;text-align:center}
-th.we{background:#22253a}
-.ddate{font-weight:400;opacity:.65}
-td{border:1px solid #f1f5f9;text-align:center;vertical-align:middle;padding:2px 1px;height:18px}
-td.we{background:#fafbfd}
-.nc{text-align:left;padding:2px 6px;white-space:nowrap;position:sticky;left:0;background:#fff;border-right:2px solid #e2e8f0;font-size:8px}
-.nc.name{font-weight:700;font-size:9px;min-width:100px}
-.legend{display:flex;gap:14px;margin-top:8px;font-size:8px;flex-wrap:wrap;margin-bottom:12px}
-.li{display:flex;align-items:center;gap:4px}
-.ld{width:10px;height:10px;border-radius:2px}
-.signature-box{text-align:right;margin-top:12px;page-break-inside:avoid}
-.signature-inner{border:1px solid #1a1d2e;display:inline-block;padding:8px 40px}
-.signature-label{font-size:8px;color:#64748b;margin-bottom:20px}
-.signature-space{height:30px}
-@media print{@page{size:A3 landscape;margin:8mm}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0}}
-</style></head><body>
-<div class="head">
-  <h1>Planning Équipe — ${frDate(startD)} au ${frDate(endD)}</h1>
-  <div class="sub">Généré le ${frDate(new Date())} · ${activePArr.length} collaborateurs · ${days.length} jours</div>
-</div>
-<table>
-  <thead><tr><th class="nc">Réf.</th><th class="nc name">Collaborateur</th>${headerCells}</tr></thead>
-  <tbody>${rows}</tbody>
-</table>
-<div class="legend">
-  <div class="li"><div class="ld" style="background:#ef4444"></div>CA — Congé Annuel</div>
-  <div class="li"><div class="ld" style="background:#22c55e"></div>JRTT</div>
-  <div class="li"><div class="ld" style="background:#eab308"></div>CET</div>
-  <div class="li"><div class="ld" style="background:#8b5cf6"></div>VAC — Vacances Scolaires</div>
-  <div class="li"><div class="ld" style="background:#f97316"></div>JF — Jour Férié</div>
-</div>
-<div class="signature-box">
-  <div class="signature-inner">
-    <div class="signature-label">Signature validation cycle</div>
-    <div class="signature-space"></div>
-  </div>
-</div>
-</body></html>`;
-
-  const win=window.open("","_blank");
-  win.document.write(html); win.document.close();
-  setTimeout(()=>win.print(),600);
-  hideModal("pdfModal");
-};
-
-/* ── CSV EXPORT ──────────────────────────────────── */
-window.exportCSV = () => {
-  const rows=[["Matricule","Type","Date de début","Heure début","Date de fin","Heure fin"]];
-  const all=[];
-  PERSONS.forEach(nom=>{
-    const d=data[nom];
-    if (!d) return;
-    ["CA","JRTT","CET"].forEach(t=>{
-      (d[t]||[]).forEach(date=>all.push({id:d.id,nom,date,type:t}));
-    });
-  });
-  all.sort((a,b)=>a.date.localeCompare(b.date));
-  all.forEach(e=>{
-    const dd=new Date(e.date);
-    rows.push([e.id,e.type,frDate(dd),"07:30",frDate(dd),"17:00"]);
-  });
-  const csv=rows.map(r=>r.join(";")).join("\n");
-  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); a.href=url; a.download="planning_export.csv"; a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-};
-
-/* ── ICS DOWNLOAD ──────────────────────────────── */
-function buildICSContent(nom, d) {
-  const id = d.id;
-  const lines = [
-    "BEGIN:VCALENDAR","VERSION:2.0",
-    "PRODID:-//Planning JRTT CET CA//FR","CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",`X-WR-CALNAME:Planning ${nom}`,
-    "X-WR-TIMEZONE:Europe/Paris"
-  ];
-  ["CA","JRTT","CET"].forEach(type => {
-    (d[type]||[]).forEach(date => {
-      const ds = date.replace(/-/g,"");
-      const summary = type==="CA" ? "Congé" : type;
-      const desc    = type==="CA" ? `CA - ${nom} (${id})` : `${type} - ${nom} (${id})`;
-      lines.push(
-        "BEGIN:VEVENT",
-        `UID:${id}-${ds}@planning.local`,
-        `DTSTAMP:${new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)}Z`,
-        `DTSTART;VALUE=DATE:${ds}`,`DTEND;VALUE=DATE:${ds}`,
-        `SUMMARY:${summary}`,`DESCRIPTION:${desc}`,
-        "STATUS:CONFIRMED","SEQUENCE:0","END:VEVENT"
-      );
-    });
-  });
-  lines.push("END:VCALENDAR");
-  return lines.join("\r\n");
-}
-
-function buildDLModal() {
-  const list = document.getElementById("dlCheckList");
-  list.innerHTML = "";
-  PERSONS.forEach(nom => {
-    const d=data[nom];
-    if (!d) return;
-    const row=document.createElement("div"); row.className="check-row";
-    row.onclick=()=>{ dlSelected.has(nom)?dlSelected.delete(nom):dlSelected.add(nom); updateDLCount(); buildDLModal(); };
-    row.innerHTML=`<div class="cbox${dlSelected.has(nom)?" checked":""}"></div><span class="cname">${nom}</span><span class="cid">${d.id}</span>`;
-    list.appendChild(row);
-  });
-  updateDLCount();
-}
-
-function updateDLCount() {
-  document.getElementById("dlCount").textContent = `${dlSelected.size} sélectionné(s)`;
-  document.getElementById("dlBtn").disabled = dlSelected.size===0;
-}
-
-window.dlSelectAll  = () => { PERSONS.forEach(p=>dlSelected.add(p));  buildDLModal(); };
-window.dlSelectNone = () => { dlSelected.clear();                     buildDLModal(); };
-
-window.downloadICS = () => {
-  [...dlSelected].forEach((nom,i) => {
-    const d=data[nom];
-    if (!d) return;
-    const content=buildICSContent(nom,d);
-    const blob=new Blob([content],{type:"text/calendar"});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement("a"); a.href=url; a.download=`Planning_${nom.replace(/ /g,"_")}_${d.id}.ics`; a.click();
-    setTimeout(()=>URL.revokeObjectURL(url),1500);
-  });
-  hideModal("dlModal");
-};
-
-/* ── MANAGE PERSONS ──────────────────────────────── */
-function buildPersonManageList() {
-  const list = document.getElementById("personManageList");
-  list.innerHTML = "";
-  
-  const sortedPersons = Object.keys(data).sort();
-  
-  sortedPersons.forEach(nom => {
-    const d = data[nom];
-    const isProtected = nom === "PLATEROTI Thierry" || nom === "ETIEN Vincent";
-    
-    const row = document.createElement("div");
-    row.className = "check-row";
-    row.style.cursor = "default";
-    row.innerHTML = `
-      <span class="cname" style="flex:1">${nom}</span>
-      <span class="cid" style="margin-right:10px">${d.id}</span>
-      ${isProtected ? 
-        '<span style="font-size:.7rem;color:#94a3b8;padding:4px 8px">Protégé</span>' :
-        '<button class="mbtn danger" style="font-size:.7rem;padding:4px 10px" onclick="deletePerson(\'' + nom + '\')">Supprimer</button>'
-      }
-    `;
-    list.appendChild(row);
-  });
-}
-
-window.addNewPerson = async () => {
-  const name = document.getElementById("newPersonName").value.trim().toUpperCase();
-  const id = document.getElementById("newPersonId").value.trim().toUpperCase();
-  
-  if (!name || !id) {
-    alert("Veuillez remplir le nom et le matricule");
-    return;
-  }
-  
-  if (data[name]) {
-    alert("Cette personne existe déjà");
-    return;
-  }
-  
-  // Ajouter dans data
-  data[name] = { id, CA: [], JRTT: [], CET: [] };
-  
-  // Ajouter dans PERSONS
-  if (!PERSONS.includes(name)) {
-    PERSONS.push(name);
-    PERSONS.sort();
-  }
-  
-  // Ajouter dans activePersons
-  activePersons.add(name);
-  
-  // Sauvegarder dans Firebase
-  try {
-    await setDoc(doc(db, "jrtt", name), { CA: [], JRTT: [], CET: [] });
-  } catch(e) {
-    console.error(e);
-  }
-  
-  // Créer un login pour cette personne
-  const username = name.toLowerCase().replace(/\s+/g, "");
-  USERS[username] = {
-    password: username + "2026",
-    role: "employee",
-    name: name,
-    personKey: name
-  };
-  
-  // Réinitialiser les champs
-  document.getElementById("newPersonName").value = "";
-  document.getElementById("newPersonId").value = "";
-  
-  // Rafraîchir l'affichage
-  buildPersonManageList();
-  buildSidebar();
-  render();
-  
-  alert(`Personne ajoutée !\nLogin: ${username}\nMot de passe: ${username}2026`);
-};
-
-window.deletePerson = async (nom) => {
-  if (nom === "PLATEROTI Thierry" || nom === "ETIEN Vincent") {
-    alert("Impossible de supprimer cette personne");
-    return;
-  }
-  
-  if (!confirm(`Supprimer ${nom} et toutes ses données ?`)) {
-    return;
-  }
-  
-  // Retirer de data
-  delete data[nom];
-  
-  // Retirer de PERSONS
-  const idx = PERSONS.indexOf(nom);
-  if (idx > -1) {
-    PERSONS.splice(idx, 1);
-  }
-  
-  // Retirer de activePersons
-  activePersons.delete(nom);
-  
-  // Retirer de dlSelected
-  dlSelected.delete(nom);
-  
-  // Supprimer de Firebase
-  try {
-    const docRef = doc(db, "jrtt", nom);
-    await deleteDoc(docRef);
-  } catch(e) {
-    console.error(e);
-  }
-  
-  // Retirer le login
-  const username = nom.toLowerCase().replace(/\s+/g, "");
-  delete USERS[username];
-  
-  // Rafraîchir l'affichage
-  buildPersonManageList();
-  buildSidebar();
-  render();
-};
-
-/* ── MODAL HELPERS ─────────────────────────────── */
-window.showModal = id => {
-  document.getElementById(id).classList.add("show");
-  if (id==="dlModal") buildDLModal();
-  if (id==="managePersonsModal") buildPersonManageList();
-};
+window.showModal = id => document.getElementById(id).classList.add("show");
 window.hideModal = id => document.getElementById(id).classList.remove("show");
+document.querySelectorAll(".overlay").forEach(o => o.addEventListener("click",()=>o.classList.remove("show")));
 
-// Close on overlay click
-document.querySelectorAll(".overlay").forEach(o => {
-  o.addEventListener("click",()=>o.classList.remove("show"));
-});
-
-/* ── START ─────────────────────────────────────── */
-const now=new Date();
-curYear  = (now.getFullYear()===2026) ? now.getFullYear() : 2026;
-curMonth = (now.getFullYear()===2026) ? now.getMonth()    : 0;
+buildSidebar();
+render();
 </script>
 </body>
 </html>
