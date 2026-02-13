@@ -398,13 +398,13 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 <body>
 
 <header>
-  <h1>📅 Planning Équipe 2026</h1>
+  <h1>Planning Équipe 2026</h1>
   <div class="header-sep"></div>
   <input type="file" id="icsFileInput" accept=".ics" multiple style="display:none">
-  <button class="hbtn" onclick="showModal('importModal')">⊕ Importer ICS</button>
-  <button class="hbtn" onclick="exportCSV()">⬇ Export CSV</button>
-  <button class="hbtn" onclick="showModal('pdfModal')">🖨 PDF Cycle</button>
-  <button class="hbtn accent" onclick="showModal('dlModal')">⬇ DL ICS</button>
+  <button class="hbtn" onclick="showModal('importModal')">Importer ICS</button>
+  <button class="hbtn" onclick="exportCSV()">Export CSV</button>
+  <button class="hbtn" onclick="showModal('pdfModal')">PDF Cycle</button>
+  <button class="hbtn accent" onclick="showModal('dlModal')">DL ICS</button>
   <span class="sync-pill loading" id="syncPill">Connexion…</span>
 </header>
 
@@ -450,7 +450,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 <!-- ── MODAL IMPORT ICS ─────────────────────────────── -->
 <div class="overlay" id="importModal">
   <div class="modal" onclick="event.stopPropagation()">
-    <h2>⊕ Importer un calendrier ICS</h2>
+    <h2>Importer un calendrier ICS</h2>
     <p>Vacances scolaires, jours fériés, événements d'entreprise…</p>
     <div class="drop-zone" id="dropZone" onclick="document.getElementById('icsFileInput').click()">
       <div class="drop-icon">📂</div>
@@ -470,7 +470,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 <!-- ── MODAL PDF ──────────────────────────────────────── -->
 <div class="overlay" id="pdfModal">
   <div class="modal" onclick="event.stopPropagation()">
-    <h2>🖨 Export PDF — Cycle</h2>
+    <h2>Export PDF — Cycle</h2>
     <p>Choisissez la plage de dates. Recommandé : 8 semaines = ~56 jours.</p>
     <div style="display:flex;gap:14px">
       <div class="modal-field" style="flex:1">
@@ -488,7 +488,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
     </div>
     <div class="modal-footer">
       <button class="mbtn" onclick="hideModal('pdfModal')">Annuler</button>
-      <button class="mbtn primary" onclick="exportPDF()">🖨 Générer & Imprimer</button>
+      <button class="mbtn primary" onclick="exportPDF()">Générer & Imprimer</button>
     </div>
   </div>
 </div>
@@ -496,7 +496,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 <!-- ── MODAL DOWNLOAD ICS ─────────────────────────────── -->
 <div class="overlay" id="dlModal">
   <div class="modal" onclick="event.stopPropagation()">
-    <h2>⬇ Télécharger ICS Salariés</h2>
+    <h2>Télécharger ICS Salariés</h2>
     <p>Sélectionnez les collaborateurs, puis téléchargez leur planning au format .ics.</p>
     <div style="display:flex;gap:8px;margin-bottom:10px">
       <button class="mbtn" style="font-size:.74rem" onclick="dlSelectAll()">Tout sélectionner</button>
@@ -506,7 +506,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
     <div style="font-size:.78rem;color:#64748b;margin-bottom:6px" id="dlCount">0 sélectionné(s)</div>
     <div class="modal-footer">
       <button class="mbtn" onclick="hideModal('dlModal')">Annuler</button>
-      <button class="mbtn primary" id="dlBtn" onclick="downloadICS()">⬇ Télécharger</button>
+      <button class="mbtn primary" id="dlBtn" onclick="downloadICS()">Télécharger</button>
     </div>
   </div>
 </div>
@@ -826,28 +826,36 @@ fin.addEventListener("change",   e=>parseICSFiles(e.target.files));
 
 function parseICSFiles(files) {
   let count = 0;
-  Array.from(files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const txt = ev.target.result;
-      const evRe = /BEGIN:VEVENT([\s\S]*?)END:VEVENT/g;
-      let m;
-      while ((m=evRe.exec(txt))!==null) {
-        const block = m[1];
-        const ds  = (block.match(/DTSTART[^:]*:(\d{8})/)||[])[1];
-        const sum = ((block.match(/SUMMARY:(.+)/)||[])[1]||"").trim();
-        if (!ds) continue;
-        const date = `${ds.slice(0,4)}-${ds.slice(4,6)}-${ds.slice(6,8)}`;
-        let type = "VAC";
-        if (sum.toLowerCase().includes("férié")||sum.toLowerCase().includes("ferie")) type = "JF";
-        extraEvents.push({person:sum, key:"VAC", date, type, label:sum, id:""});
-        count++;
-      }
-      updateImportNote();
-      buildSidebar();
-      render();
-    };
-    reader.readAsText(file);
+  const processFile = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const txt = ev.target.result;
+        const evRe = /BEGIN:VEVENT([\s\S]*?)END:VEVENT/g;
+        let m;
+        while ((m=evRe.exec(txt))!==null) {
+          const block = m[1];
+          const dsMatch = block.match(/DTSTART[;:](?:VALUE=DATE:)?(\d{8})/);
+          const ds = dsMatch ? dsMatch[1] : null;
+          const sumMatch = block.match(/SUMMARY:(.+)/);
+          const sum = sumMatch ? sumMatch[1].trim() : "";
+          if (!ds) continue;
+          const date = `${ds.slice(0,4)}-${ds.slice(4,6)}-${ds.slice(6,8)}`;
+          let type = "VAC";
+          if (sum.toLowerCase().includes("férié")||sum.toLowerCase().includes("ferie")||sum.toLowerCase().includes("fête")) type = "JF";
+          extraEvents.push({person:sum, key:type, date, type, label:sum, id:""});
+          count++;
+        }
+        resolve();
+      };
+      reader.readAsText(file, 'UTF-8');
+    });
+  };
+
+  Promise.all(Array.from(files).map(processFile)).then(() => {
+    updateImportNote();
+    buildSidebar();
+    render();
   });
   fin.value = "";
 }
@@ -940,6 +948,12 @@ td.we{background:#fafbfd}
   <div class="li"><div class="ld" style="background:#8b5cf6"></div>VAC — Vacances Scolaires</div>
   <div class="li"><div class="ld" style="background:#f97316"></div>JF — Jour Férié</div>
 </div>
+<div style="margin-top:20px;text-align:right;padding-right:20px">
+  <div style="border:1px solid #1a1d2e;display:inline-block;padding:8px 40px">
+    <div style="font-size:8px;color:#64748b;margin-bottom:20px">Signature validation cycle</div>
+    <div style="height:30px"></div>
+  </div>
+</div>
 </body></html>`;
 
   const win=window.open("","_blank");
@@ -950,7 +964,7 @@ td.we{background:#fafbfd}
 
 /* ── CSV EXPORT ──────────────────────────────────── */
 window.exportCSV = () => {
-  const rows=[["Matricule","Nom","Date","Jour","Type"]];
+  const rows=[["Matricule","Type","Date de début","Date de fin"]];
   const all=[];
   PERSONS.forEach(nom=>{
     const d=data[nom];
@@ -961,8 +975,7 @@ window.exportCSV = () => {
   all.sort((a,b)=>a.date.localeCompare(b.date));
   all.forEach(e=>{
     const dd=new Date(e.date);
-    const dn=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"][dd.getDay()];
-    rows.push([e.id,e.nom,frDate(dd),dn,e.type]);
+    rows.push([e.id,e.type,`${frDate(dd)} 07:30`,`${frDate(dd)} 17:00`]);
   });
   const csv=rows.map(r=>r.join(";")).join("\n");
   const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
@@ -987,9 +1000,9 @@ function buildICSContent(nom, d) {
       const desc    = type==="CA" ? `CA - ${nom} (${id})` : `${type} - ${nom} (${id})`;
       lines.push(
         "BEGIN:VEVENT",
-        `UID:${id}-${ds}T073000@planning.local`,
+        `UID:${id}-${ds}@planning.local`,
         `DTSTAMP:${new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)}Z`,
-        `DTSTART:${ds}T073000`,`DTEND:${ds}T170000`,
+        `DTSTART;VALUE=DATE:${ds}`,`DTEND;VALUE=DATE:${ds}`,
         `SUMMARY:${summary}`,`DESCRIPTION:${desc}`,
         "STATUS:CONFIRMED","SEQUENCE:0","END:VEVENT"
       );
