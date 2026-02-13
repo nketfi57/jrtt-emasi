@@ -14,6 +14,98 @@ body {
   min-height: 100vh;
 }
 
+/* ── LOGIN PAGE ─────────────────────────────────────── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+
+.login-box h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a1d2e;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.login-box p {
+  font-size: .9rem;
+  color: #64748b;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.login-field {
+  margin-bottom: 20px;
+}
+
+.login-field label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.login-field input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: .95rem;
+  color: #1a1d2e;
+  transition: border-color .2s;
+}
+
+.login-field input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: #667eea;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+  margin-top: 8px;
+}
+
+.login-btn:hover {
+  background: #5568d3;
+}
+
+.login-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: .85rem;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.login-error.show {
+  display: block;
+}
+
 /* ── HEADER ─────────────────────────────────────────── */
 header {
   background: #1a1d2e;
@@ -33,6 +125,20 @@ header {
 header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space: nowrap; }
 
 .header-sep { flex: 1; }
+
+.user-badge {
+  font-size: .75rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.1);
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.user-badge.admin {
+  background: rgba(249,115,22,.2);
+  color: #fdba74;
+}
 
 .sync-pill {
   font-size: .72rem; font-weight: 600; padding: 4px 12px;
@@ -216,12 +322,15 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
   border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;
   min-height: 84px; padding: 6px 5px; background: #fff;
   transition: background .12s;
+  position: relative;
 }
 .dcell:last-child { border-right: none; }
 .dcell.other  { background: #fafbfd; }
 .dcell.other .dnum { color: #d1d5db; }
 .dcell.wkend  { background: #fcfcfe; }
 .dcell.todaycell { background: #eff6ff; }
+.dcell.clickable { cursor: pointer; }
+.dcell.clickable:hover { background: #fef3c7; }
 
 .dnum {
   font-size: .75rem; font-weight: 800; color: #475569;
@@ -256,6 +365,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 .bg-DALMAS     { background:#fff1f2; color:#881337; border-color:#e11d48; }
 .bg-CHRISTOPHE { background:#f0f9ff; color:#0c4a6e; border-color:#0284c7; }
 .bg-CLAUDE     { background:#fefce8; color:#713f12; border-color:#ca8a04; }
+.bg-ETIEN      { background:#fce7f3; color:#831843; border-color:#db2777; }
 .bg-VAC        { background:rgba(139,92,246,.12); color:#5b21b6; border-color:#8b5cf6; }
 .bg-JF         { background:rgba(249,115,22,.12); color:#c2410c; border-color:#f97316; }
 
@@ -275,6 +385,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 .pdot-DALMAS     { background:#e11d48; }
 .pdot-CHRISTOPHE { background:#0284c7; }
 .pdot-CLAUDE     { background:#ca8a04; }
+.pdot-ETIEN      { background:#db2777; }
 
 /* ── LIST VIEW ─────────────────────────────────────── */
 .list-wrap {
@@ -336,12 +447,12 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 
 .modal-field { margin-bottom:14px; }
 .modal-field label { display:block; font-size:.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.6px; margin-bottom:6px; }
-.modal-field input[type=date] {
+.modal-field input[type=date], .modal-field select {
   width:100%; padding:8px 12px; border:1px solid #e2e8f0; border-radius:8px;
   font-size:.88rem; color:#1a1d2e; background:#f8fafc;
   transition:border-color .15s;
 }
-.modal-field input[type=date]:focus { outline:none; border-color:#4f5edc; background:#fff; }
+.modal-field input[type=date]:focus, .modal-field select:focus { outline:none; border-color:#4f5edc; background:#fff; }
 
 .drop-zone {
   border:2px dashed #e2e8f0; border-radius:12px;
@@ -362,6 +473,8 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 .mbtn:hover { background:#e2e8f0; }
 .mbtn.primary { background:#1a1d2e; color:#fff; border-color:#1a1d2e; }
 .mbtn.primary:hover { opacity:.85; }
+.mbtn.danger { background:#ef4444; color:#fff; border-color:#ef4444; }
+.mbtn.danger:hover { opacity:.85; }
 .mbtn:disabled { opacity:.45; cursor:not-allowed; }
 
 /* checklist in download modal */
@@ -397,15 +510,40 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
 </head>
 <body>
 
+<!-- ── LOGIN PAGE ─────────────────────────────────── -->
+<div class="login-page" id="loginPage">
+  <div class="login-box">
+    <h1>Planning Équipe 2026</h1>
+    <p>Connectez-vous pour accéder à votre planning</p>
+    <div class="login-error" id="loginError">Identifiant ou mot de passe incorrect</div>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="login-field">
+        <label>Identifiant</label>
+        <input type="text" id="loginUsername" required autocomplete="username">
+      </div>
+      <div class="login-field">
+        <label>Mot de passe</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn">Se connecter</button>
+    </form>
+  </div>
+</div>
+
+<!-- ── MAIN APP ─────────────────────────────────────── -->
+<div id="mainApp" style="display:none">
+
 <header>
   <h1>Planning Équipe 2026</h1>
+  <div class="user-badge" id="userBadge"></div>
   <div class="header-sep"></div>
   <input type="file" id="icsFileInput" accept=".ics" multiple style="display:none">
-  <button class="hbtn" onclick="showModal('importModal')">Importer ICS</button>
-  <button class="hbtn" onclick="exportCSV()">Export CSV</button>
-  <button class="hbtn" onclick="showModal('pdfModal')">PDF Cycle</button>
-  <button class="hbtn accent" onclick="showModal('dlModal')">DL ICS</button>
+  <button class="hbtn admin-only" onclick="showModal('importModal')">Importer ICS</button>
+  <button class="hbtn admin-only" onclick="exportCSV()">Export CSV</button>
+  <button class="hbtn admin-only" onclick="showModal('pdfModal')">PDF Cycle</button>
+  <button class="hbtn accent admin-only" onclick="showModal('dlModal')">DL ICS</button>
   <span class="sync-pill loading" id="syncPill">Connexion…</span>
+  <button class="hbtn red" onclick="logout()">Déconnexion</button>
 </header>
 
 <div class="layout">
@@ -415,8 +553,8 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
     <div class="sidebar-top">
       <div class="sidebar-label">Types</div>
       <div class="type-legend" id="typeLegend"></div>
-      <div class="sidebar-label" style="margin-top:10px">Collaborateurs</div>
-      <div class="toggle-row">
+      <div class="sidebar-label admin-only" style="margin-top:10px">Collaborateurs</div>
+      <div class="toggle-row admin-only">
         <button class="tgl-btn" onclick="selectAllPersons()">Tous</button>
         <button class="tgl-btn" onclick="selectNonePersons()">Aucun</button>
       </div>
@@ -438,8 +576,8 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
       <div class="tsep"></div>
       <div class="view-tabs">
         <button class="vtab active" id="vtab-month" onclick="setView('month')">Mois</button>
-        <button class="vtab" id="vtab-list"  onclick="setView('list')">Liste</button>
-        <button class="vtab" id="vtab-grid"  onclick="setView('grid')">Grille</button>
+        <button class="vtab admin-only" id="vtab-list"  onclick="setView('list')">Liste</button>
+        <button class="vtab admin-only" id="vtab-grid"  onclick="setView('grid')">Grille</button>
       </div>
       <div class="count-badge" id="countBadge">0 jours</div>
     </div>
@@ -511,6 +649,40 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
   </div>
 </div>
 
+<!-- ── MODAL ADD EVENT ─────────────────────────────────── -->
+<div class="overlay" id="addEventModal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>Ajouter un jour</h2>
+    <p id="addEventDate"></p>
+    <div class="modal-field">
+      <label>Type</label>
+      <select id="addEventType">
+        <option value="CA">Congé Annuel (CA)</option>
+        <option value="JRTT">JRTT</option>
+        <option value="CET">CET</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="mbtn" onclick="hideModal('addEventModal')">Annuler</button>
+      <button class="mbtn primary" onclick="confirmAddEvent()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL DELETE EVENT ─────────────────────────────── -->
+<div class="overlay" id="deleteEventModal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>Supprimer un jour</h2>
+    <p id="deleteEventInfo"></p>
+    <div class="modal-footer">
+      <button class="mbtn" onclick="hideModal('deleteEventModal')">Annuler</button>
+      <button class="mbtn danger" onclick="confirmDeleteEvent()">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
 <script type="module">
 import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { getFirestore, collection, getDocs, setDoc, doc, onSnapshot }
@@ -528,9 +700,33 @@ const FB = {
 const app = initializeApp(FB);
 const db  = getFirestore(app);
 
+/* ── USERS DATABASE ─────────────────────────────────── */
+const USERS = {
+  // ADMINS
+  "thierry": { password: "planning2026", role: "admin", name: "PLATEROTI Thierry", personKey: "PLATEROTI Thierry" },
+  "vincent": { password: "planning2026", role: "admin", name: "ETIEN Vincent", personKey: "ETIEN Vincent" },
+  
+  // EMPLOYEES
+  "schenck": { password: "schenck2026", role: "employee", name: "SCHENCK", personKey: "SCHENCK" },
+  "callea": { password: "callea2026", role: "employee", name: "CALLEA", personKey: "CALLEA" },
+  "dautel": { password: "dautel2026", role: "employee", name: "DAUTEL", personKey: "DAUTEL" },
+  "grimaud": { password: "grimaud2026", role: "employee", name: "GRIMAUD", personKey: "GRIMAUD" },
+  "gilles": { password: "gilles2026", role: "employee", name: "GILLES", personKey: "GILLES" },
+  "zimmermann": { password: "zimmermann2026", role: "employee", name: "ZIMMERMANN", personKey: "ZIMMERMANN" },
+  "rabetge": { password: "rabetge2026", role: "employee", name: "RABETGE", personKey: "RABETGE" },
+  "klein": { password: "klein2026", role: "employee", name: "KLEIN", personKey: "KLEIN" },
+  "debs": { password: "debs2026", role: "employee", name: "DEBS", personKey: "DEBS" },
+  "vaubourg": { password: "vaubourg2026", role: "employee", name: "VAUBOURG", personKey: "VAUBOURG" },
+  "martel": { password: "martel2026", role: "employee", name: "MARTEL", personKey: "MARTEL" },
+  "dalmas": { password: "dalmas2026", role: "employee", name: "DALMAS", personKey: "DALMAS" },
+  "christophe": { password: "christophe2026", role: "employee", name: "CHRISTOPHE", personKey: "CHRISTOPHE" },
+  "claude": { password: "claude2026", role: "employee", name: "CLAUDE", personKey: "CLAUDE" }
+};
+
 /* ── STATIC DATA ─────────────────────────────────── */
 const INITIAL_DATA = {
   "PLATEROTI Thierry": { id:"R457", CA:["2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21","2026-08-22","2026-08-23","2026-08-24","2026-08-25","2026-08-26","2026-08-27","2026-08-28","2026-12-29","2026-12-30","2026-12-31"], JRTT:[], CET:[] },
+  "ETIEN Vincent": { id:"R999", CA:[], JRTT:[], CET:[] },
   "SCHENCK":    { id:"R458", CA:[], JRTT:["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-02-13","2026-02-27","2026-03-13","2026-03-20","2026-04-30","2026-05-07"], CET:["2026-04-20","2026-04-21","2026-04-22","2026-04-23","2026-04-24"] },
   "CALLEA":     { id:"R459", CA:["2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-04-20","2026-04-21","2026-08-10","2026-08-11","2026-08-12","2026-08-13","2026-08-14","2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21"], JRTT:["2026-04-22","2026-04-23","2026-04-24"], CET:["2026-03-09","2026-03-10","2026-03-11","2026-03-12","2026-03-13"] },
   "DAUTEL":     { id:"R461", CA:["2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-08-10","2026-08-11","2026-08-12","2026-08-13","2026-08-14","2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21"], JRTT:[], CET:["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-03-20","2026-03-27","2026-04-10","2026-04-17","2026-04-24"] },
@@ -552,14 +748,59 @@ const MONTHS_FR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","A
 const DAYS_S    = ["Lu","Ma","Me","Je","Ve","Sa","Di"];
 
 /* ── STATE ─────────────────────────────────────────── */
+let currentUser = null;
 let data          = JSON.parse(JSON.stringify(INITIAL_DATA));
 let activePersons = new Set(PERSONS);
 let activeTypes   = new Set(["CA","JRTT","CET"]);
-let extraEvents   = []; // {date, type:"VAC"|"JF", label}
+let extraEvents   = [];
 let curYear       = 2026;
 let curMonth      = 0;
 let curView       = "month";
 let dlSelected    = new Set(PERSONS);
+let pendingEventDate = null;
+let pendingDeleteEvent = null;
+
+/* ── LOGIN ─────────────────────────────────────────── */
+window.handleLogin = (e) => {
+  e.preventDefault();
+  const username = document.getElementById("loginUsername").value.toLowerCase().trim();
+  const password = document.getElementById("loginPassword").value;
+  
+  if (USERS[username] && USERS[username].password === password) {
+    currentUser = USERS[username];
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("mainApp").style.display = "block";
+    
+    // Update UI for role
+    const badge = document.getElementById("userBadge");
+    badge.textContent = currentUser.name;
+    badge.className = currentUser.role === "admin" ? "user-badge admin" : "user-badge";
+    
+    // Show/hide admin features
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.style.display = currentUser.role === "admin" ? "" : "none";
+    });
+    
+    // Set active persons based on role
+    if (currentUser.role === "employee") {
+      activePersons = new Set([currentUser.personKey]);
+    }
+    
+    initFirebase();
+  } else {
+    document.getElementById("loginError").classList.add("show");
+    setTimeout(() => {
+      document.getElementById("loginError").classList.remove("show");
+    }, 3000);
+  }
+};
+
+window.logout = () => {
+  currentUser = null;
+  document.getElementById("loginPage").style.display = "flex";
+  document.getElementById("mainApp").style.display = "none";
+  document.getElementById("loginForm").reset();
+};
 
 /* ── FIREBASE INIT ─────────────────────────────────── */
 async function initFirebase() {
@@ -618,21 +859,29 @@ function buildSidebar() {
   const list = document.getElementById("personList");
   const st   = list.scrollTop;
   list.innerHTML = "";
-  PERSONS.forEach(nom => {
+  
+  const personsToShow = currentUser.role === "admin" ? PERSONS : [currentUser.personKey];
+  
+  personsToShow.forEach(nom => {
     const d    = data[nom];
+    if (!d) return;
     const total= (d.CA.length + d.JRTT.length + d.CET.length);
     const key  = nom.split(" ")[0];
     const el   = document.createElement("div");
     el.className = "person-row" + (activePersons.has(nom)?"":" off");
     el.innerHTML = `<div class="pdot pdot-${key}"></div><span class="pname">${nom}</span><span class="pid">${d.id}</span>`;
-    el.onclick = () => { activePersons.has(nom)?activePersons.delete(nom):activePersons.add(nom); buildSidebar(); render(); };
+    
+    if (currentUser.role === "admin") {
+      el.onclick = () => { activePersons.has(nom)?activePersons.delete(nom):activePersons.add(nom); buildSidebar(); render(); };
+    }
+    
     list.appendChild(el);
   });
   list.scrollTop = st;
 }
 
-window.selectAllPersons  = () => { PERSONS.forEach(p=>activePersons.add(p));   buildSidebar(); render(); };
-window.selectNonePersons = () => { activePersons.clear();                       buildSidebar(); render(); };
+window.selectAllPersons  = () => { if(currentUser.role==="admin") { PERSONS.forEach(p=>activePersons.add(p)); buildSidebar(); render(); } };
+window.selectNonePersons = () => { if(currentUser.role==="admin") { activePersons.clear(); buildSidebar(); render(); } };
 
 /* ── HELPERS ─────────────────────────────────────── */
 function getAllEventsFlat() {
@@ -640,6 +889,7 @@ function getAllEventsFlat() {
   PERSONS.forEach(nom => {
     if (!activePersons.has(nom)) return;
     const d = data[nom];
+    if (!d) return;
     const key = nom.split(" ")[0];
     ["CA","JRTT","CET"].forEach(t => {
       if (!activeTypes.has(t)) return;
@@ -689,6 +939,70 @@ window.setView = (v) => {
   render();
 };
 
+/* ── EVENT MANAGEMENT ─────────────────────────────── */
+window.handleCellClick = (dateStr) => {
+  const idx = buildDateIndex();
+  const existing = (idx[dateStr] || []).filter(e => 
+    e.person === currentUser.personKey && ["CA","JRTT","CET"].includes(e.type)
+  );
+  
+  if (existing.length > 0) {
+    // Delete
+    pendingDeleteEvent = { date: dateStr, event: existing[0] };
+    document.getElementById("deleteEventInfo").textContent = 
+      `Supprimer ${existing[0].type} le ${frDate(new Date(dateStr))} ?`;
+    showModal("deleteEventModal");
+  } else {
+    // Add
+    pendingEventDate = dateStr;
+    document.getElementById("addEventDate").textContent = `Date : ${frDate(new Date(dateStr))}`;
+    showModal("addEventModal");
+  }
+};
+
+window.confirmAddEvent = async () => {
+  const type = document.getElementById("addEventType").value;
+  const personKey = currentUser.personKey;
+  
+  if (!data[personKey][type].includes(pendingEventDate)) {
+    data[personKey][type].push(pendingEventDate);
+    data[personKey][type].sort();
+    
+    try {
+      await setDoc(doc(db, "jrtt", personKey), {
+        CA: data[personKey].CA,
+        JRTT: data[personKey].JRTT,
+        CET: data[personKey].CET
+      });
+    } catch(e) {
+      console.error(e);
+    }
+  }
+  
+  hideModal("addEventModal");
+  render();
+};
+
+window.confirmDeleteEvent = async () => {
+  const { date, event } = pendingDeleteEvent;
+  const personKey = currentUser.personKey;
+  
+  data[personKey][event.type] = data[personKey][event.type].filter(d => d !== date);
+  
+  try {
+    await setDoc(doc(db, "jrtt", personKey), {
+      CA: data[personKey].CA,
+      JRTT: data[personKey].JRTT,
+      CET: data[personKey].CET
+    });
+  } catch(e) {
+    console.error(e);
+  }
+  
+  hideModal("deleteEventModal");
+  render();
+};
+
 /* ── MAIN RENDER ─────────────────────────────────── */
 function render() {
   document.getElementById("monthTitle").textContent = `${MONTHS_FR[curMonth]} ${curYear}`;
@@ -707,7 +1021,9 @@ function render() {
   document.getElementById("countBadge").textContent = `${thisMonth.length} jours ce mois`;
 
   // PDF modal info
-  updatePDFInfo();
+  if (currentUser && currentUser.role === "admin") {
+    updatePDFInfo();
+  }
 }
 
 /* ── MONTH VIEW ─────────────────────────────────── */
@@ -734,8 +1050,12 @@ function renderMonth(container, idx) {
     const isWE  = dow===0||dow===6;
     const isTod = ds===todayStr;
     const events= idx[ds]||[];
+    
+    const canClick = inM && currentUser && currentUser.role === "employee";
+    const clickAttr = canClick ? `onclick="handleCellClick('${ds}')"` : '';
+    const clickClass = canClick ? ' clickable' : '';
 
-    html += `<div class="dcell${!inM?" other":""}${isWE?" wkend":""}${isTod?" todaycell":""}">`;
+    html += `<div class="dcell${!inM?" other":""}${isWE?" wkend":""}${isTod?" todaycell":""}${clickClass}" ${clickAttr}>`;
     html += `<div class="dnum">${cursor.getDate()}</div><div class="tags">`;
 
     const show = events.slice(0,4);
@@ -796,6 +1116,7 @@ function renderGrid(container, idx) {
 
   const rows = activePArr.map(nom => {
     const d   = data[nom];
+    if (!d) return '';
     const key = nom.split(" ")[0];
     const cells = days.map(day => {
       const ds   = fmtDate(day);
@@ -872,15 +1193,17 @@ window.clearImports = () => { extraEvents=[]; updateImportNote(); activeTypes.de
 
 /* ── PDF EXPORT ─────────────────────────────────── */
 function updatePDFInfo() {
-  const s=document.getElementById("pdfStart").value, e=document.getElementById("pdfEnd").value;
+  const s=document.getElementById("pdfStart")?.value, e=document.getElementById("pdfEnd")?.value;
   if (!s||!e) return;
   const days=Math.round((new Date(e)-new Date(s))/86400000)+1;
   document.getElementById("pdfInfo").textContent = `Durée : ${days} jours (${Math.round(days/7)} semaines)`;
   document.getElementById("pdfPersonsInfo").textContent = `${activePersons.size} collaborateurs inclus`;
 }
 
-document.getElementById("pdfStart").addEventListener("input", updatePDFInfo);
-document.getElementById("pdfEnd").addEventListener("input", updatePDFInfo);
+if (document.getElementById("pdfStart")) {
+  document.getElementById("pdfStart").addEventListener("input", updatePDFInfo);
+  document.getElementById("pdfEnd").addEventListener("input", updatePDFInfo);
+}
 
 window.exportPDF = () => {
   const startD = new Date(document.getElementById("pdfStart").value);
@@ -899,7 +1222,9 @@ window.exportPDF = () => {
   }).join("");
 
   const rows = activePArr.map(nom=>{
-    const d=data[nom]; const key=nom.split(" ")[0];
+    const d=data[nom]; 
+    if (!d) return '';
+    const key=nom.split(" ")[0];
     const cells=days.map(day=>{
       const ds=fmtDate(day); const isWE=day.getDay()===0||day.getDay()===6;
       const evs=(idx[ds]||[]).filter(e=>e.person===nom);
@@ -972,6 +1297,7 @@ window.exportCSV = () => {
   const all=[];
   PERSONS.forEach(nom=>{
     const d=data[nom];
+    if (!d) return;
     ["CA","JRTT","CET"].forEach(t=>{
       (d[t]||[]).forEach(date=>all.push({id:d.id,nom,date,type:t}));
     });
@@ -1021,6 +1347,7 @@ function buildDLModal() {
   list.innerHTML = "";
   PERSONS.forEach(nom => {
     const d=data[nom];
+    if (!d) return;
     const row=document.createElement("div"); row.className="check-row";
     row.onclick=()=>{ dlSelected.has(nom)?dlSelected.delete(nom):dlSelected.add(nom); updateDLCount(); buildDLModal(); };
     row.innerHTML=`<div class="cbox${dlSelected.has(nom)?" checked":""}"></div><span class="cname">${nom}</span><span class="cid">${d.id}</span>`;
@@ -1040,6 +1367,7 @@ window.dlSelectNone = () => { dlSelected.clear();                     buildDLMod
 window.downloadICS = () => {
   [...dlSelected].forEach((nom,i) => {
     const d=data[nom];
+    if (!d) return;
     const content=buildICSContent(nom,d);
     const blob=new Blob([content],{type:"text/calendar"});
     const url=URL.createObjectURL(blob);
@@ -1065,8 +1393,6 @@ document.querySelectorAll(".overlay").forEach(o => {
 const now=new Date();
 curYear  = (now.getFullYear()===2026) ? now.getFullYear() : 2026;
 curMonth = (now.getFullYear()===2026) ? now.getMonth()    : 0;
-
-initFirebase();
 </script>
 </body>
 </html>
