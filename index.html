@@ -538,6 +538,7 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
   <div class="user-badge" id="userBadge"></div>
   <div class="header-sep"></div>
   <input type="file" id="icsFileInput" accept=".ics" multiple style="display:none">
+  <button class="hbtn admin-only" onclick="showModal('managePersonsModal')">Gérer personnes</button>
   <button class="hbtn admin-only" onclick="showModal('importModal')">Importer ICS</button>
   <button class="hbtn admin-only" onclick="exportCSV()">Export CSV</button>
   <button class="hbtn admin-only" onclick="showModal('pdfModal')">PDF Cycle</button>
@@ -681,11 +682,37 @@ header h1 { font-size: 1rem; font-weight: 700; letter-spacing: .3px; white-space
   </div>
 </div>
 
+<!-- ── MODAL MANAGE PERSONS ─────────────────────────────── -->
+<div class="overlay" id="managePersonsModal">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:600px">
+    <h2>Gérer les personnes</h2>
+    <p>Ajouter ou supprimer des collaborateurs</p>
+    
+    <div style="margin-bottom:20px">
+      <h3 style="font-size:.9rem;font-weight:700;margin-bottom:10px;color:#1a1d2e">Ajouter une personne</h3>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input type="text" id="newPersonName" placeholder="Nom (ex: DUPONT)" style="flex:1;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:.88rem">
+        <input type="text" id="newPersonId" placeholder="Matricule (ex: R500)" style="width:120px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:.88rem">
+      </div>
+      <button class="mbtn primary" onclick="addNewPerson()" style="width:100%">Ajouter</button>
+    </div>
+    
+    <div>
+      <h3 style="font-size:.9rem;font-weight:700;margin-bottom:10px;color:#1a1d2e">Liste des personnes</h3>
+      <div id="personManageList" style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;max-height:300px;overflow-y:auto"></div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="mbtn" onclick="hideModal('managePersonsModal')">Fermer</button>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script type="module">
 import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getFirestore, collection, getDocs, setDoc, doc, onSnapshot }
+import { getFirestore, collection, getDocs, setDoc, doc, onSnapshot, deleteDoc }
   from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 /* ── FIREBASE ─────────────────────────────────────── */
@@ -1377,10 +1404,134 @@ window.downloadICS = () => {
   hideModal("dlModal");
 };
 
+/* ── MANAGE PERSONS ──────────────────────────────── */
+function buildPersonManageList() {
+  const list = document.getElementById("personManageList");
+  list.innerHTML = "";
+  
+  const sortedPersons = Object.keys(data).sort();
+  
+  sortedPersons.forEach(nom => {
+    const d = data[nom];
+    const isProtected = nom === "PLATEROTI Thierry" || nom === "ETIEN Vincent";
+    
+    const row = document.createElement("div");
+    row.className = "check-row";
+    row.style.cursor = "default";
+    row.innerHTML = `
+      <span class="cname" style="flex:1">${nom}</span>
+      <span class="cid" style="margin-right:10px">${d.id}</span>
+      ${isProtected ? 
+        '<span style="font-size:.7rem;color:#94a3b8;padding:4px 8px">Protégé</span>' :
+        '<button class="mbtn danger" style="font-size:.7rem;padding:4px 10px" onclick="deletePerson(\'' + nom + '\')">Supprimer</button>'
+      }
+    `;
+    list.appendChild(row);
+  });
+}
+
+window.addNewPerson = async () => {
+  const name = document.getElementById("newPersonName").value.trim().toUpperCase();
+  const id = document.getElementById("newPersonId").value.trim().toUpperCase();
+  
+  if (!name || !id) {
+    alert("Veuillez remplir le nom et le matricule");
+    return;
+  }
+  
+  if (data[name]) {
+    alert("Cette personne existe déjà");
+    return;
+  }
+  
+  // Ajouter dans data
+  data[name] = { id, CA: [], JRTT: [], CET: [] };
+  
+  // Ajouter dans PERSONS
+  if (!PERSONS.includes(name)) {
+    PERSONS.push(name);
+    PERSONS.sort();
+  }
+  
+  // Ajouter dans activePersons
+  activePersons.add(name);
+  
+  // Sauvegarder dans Firebase
+  try {
+    await setDoc(doc(db, "jrtt", name), { CA: [], JRTT: [], CET: [] });
+  } catch(e) {
+    console.error(e);
+  }
+  
+  // Créer un login pour cette personne
+  const username = name.toLowerCase().replace(/\s+/g, "");
+  USERS[username] = {
+    password: username + "2026",
+    role: "employee",
+    name: name,
+    personKey: name
+  };
+  
+  // Réinitialiser les champs
+  document.getElementById("newPersonName").value = "";
+  document.getElementById("newPersonId").value = "";
+  
+  // Rafraîchir l'affichage
+  buildPersonManageList();
+  buildSidebar();
+  render();
+  
+  alert(`Personne ajoutée !\nLogin: ${username}\nMot de passe: ${username}2026`);
+};
+
+window.deletePerson = async (nom) => {
+  if (nom === "PLATEROTI Thierry" || nom === "ETIEN Vincent") {
+    alert("Impossible de supprimer cette personne");
+    return;
+  }
+  
+  if (!confirm(`Supprimer ${nom} et toutes ses données ?`)) {
+    return;
+  }
+  
+  // Retirer de data
+  delete data[nom];
+  
+  // Retirer de PERSONS
+  const idx = PERSONS.indexOf(nom);
+  if (idx > -1) {
+    PERSONS.splice(idx, 1);
+  }
+  
+  // Retirer de activePersons
+  activePersons.delete(nom);
+  
+  // Retirer de dlSelected
+  dlSelected.delete(nom);
+  
+  // Supprimer de Firebase
+  try {
+    const docRef = doc(db, "jrtt", nom);
+    await deleteDoc(docRef);
+  } catch(e) {
+    console.error(e);
+  }
+  
+  // Retirer le login
+  const username = nom.toLowerCase().replace(/\s+/g, "");
+  delete USERS[username];
+  
+  // Rafraîchir l'affichage
+  buildPersonManageList();
+  buildSidebar();
+  render();
+};
+
 /* ── MODAL HELPERS ─────────────────────────────── */
 window.showModal = id => {
   document.getElementById(id).classList.add("show");
   if (id==="dlModal") buildDLModal();
+  if (id==="managePersonsModal") buildPersonManageList();
 };
 window.hideModal = id => document.getElementById(id).classList.remove("show");
 
