@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendrier JRTT 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f5f7;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+
+  header {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 22px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  header h1 { font-size: 1.3rem; font-weight: 600; }
+
+  .sync-status {
+    font-size: 0.78rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .sync-status.ok      { background: rgba(34,197,94,0.25); color: #86efac; }
+  .sync-status.loading { background: rgba(234,179,8,0.2);  color: #fde047; }
+  .sync-status.error   { background: rgba(239,68,68,0.2);  color: #fca5a5; }
+
+  .page-layout {
+    display: flex;
+    height: calc(100vh - 62px);
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 210px;
+    min-width: 210px;
+    background: #fff;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    padding: 16px 16px 10px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .sidebar-header h2 {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .toggle-all-btn {
+    width: 100%;
+    padding: 6px 10px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    color: #374151;
+    font-weight: 500;
+    transition: background 0.15s;
+    text-align: center;
+  }
+
+  .toggle-all-btn:hover { background: #e5e7eb; }
+
+  .person-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+
+  .person-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.12s, opacity 0.15s;
+    user-select: none;
+  }
+
+  .person-item:hover { background: #f9fafb; }
+  .person-item.inactive { opacity: 0.35; }
+
+  .color-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  .person-name { font-size: 0.84rem; font-weight: 500; color: #1a1a2e; flex: 1; }
+
+  .person-count {
+    font-size: 0.72rem;
+    color: #9ca3af;
+    background: #f3f4f6;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .toolbar {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .nav-btn {
+    padding: 7px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 0.88rem;
+    cursor: pointer;
+    color: #374151;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+
+  .nav-btn:hover { background: #f3f4f6; }
+
+  .month-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    min-width: 180px;
+    text-align: center;
+  }
+
+  .today-btn {
+    padding: 7px 16px;
+    border: 1px solid #1a1a2e;
+    border-radius: 6px;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.15s;
+  }
+
+  .today-btn:hover { opacity: 0.82; }
+
+  .sep { flex: 1; }
+
+  .total-badge {
+    font-size: 0.8rem;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .calendar-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px 40px;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: 48px repeat(7, 1fr);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+  }
+
+  .col-head {
+    background: #1a1a2e;
+    color: rgba(255,255,255,0.85);
+    padding: 12px 6px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-right: 1px solid #2d2d4a;
+  }
+
+  .col-head:last-child { border-right: none; }
+  .col-head-empty { background: #1a1a2e; border-right: 1px solid #2d2d4a; }
+
+  .week-num {
+    background: #f8f9fb;
+    border-right: 1px solid #e5e7eb;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.66rem;
+    color: #b0b7c3;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .day-cell {
+    border-top: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+    min-height: 90px;
+    padding: 7px;
+    background: #fff;
+  }
+
+  .day-cell:last-child { border-right: none; }
+  .day-cell.other-month { background: #fafafa; }
+  .day-cell.other-month .day-num { color: #d1d5db; }
+  .day-cell.weekend { background: #fcfcfd; }
+  .day-cell.today { background: #eff6ff; }
+
+  .day-num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #374151;
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 5px;
+  }
+
+  .day-cell.today .day-num { background: #1a1a2e; color: #fff; }
+
+  .tags-wrap { display: flex; flex-direction: column; gap: 2px; }
+
+  .jrtt-tag {
+    font-size: 0.67rem;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    letter-spacing: 0.2px;
+  }
+
+  /* Colors */
+  .c-SCHENCK    { background: #dbeafe; color: #1d4ed8; }
+  .c-CALLEA     { background: #fce7f3; color: #9d174d; }
+  .c-KOESSLER   { background: #dcfce7; color: #15803d; }
+  .c-MARCHAL    { background: #fef3c7; color: #92400e; }
+  .c-GRIMAUD    { background: #ede9fe; color: #6d28d9; }
+  .c-GILLES     { background: #fee2e2; color: #991b1b; }
+  .c-ZIMMERMANN { background: #e0f2fe; color: #075985; }
+  .c-RABETGE    { background: #ecfdf5; color: #065f46; }
+  .c-KLEIN      { background: #fff7ed; color: #9a3412; }
+  .c-DEBS       { background: #f5f3ff; color: #5b21b6; }
+  .c-VAUBOURG   { background: #fdf2f8; color: #86198f; }
+  .c-MARTEL     { background: #f0fdf4; color: #14532d; }
+  .c-DALMAS     { background: #fff1f2; color: #9f1239; }
+  .c-CHRISTOPHE { background: #f0f9ff; color: #0c4a6e; }
+  .c-CLAUDE     { background: #fefce8; color: #713f12; }
+
+  .dot-SCHENCK    { background: #3b82f6; }
+  .dot-CALLEA     { background: #ec4899; }
+  .dot-KOESSLER   { background: #22c55e; }
+  .dot-MARCHAL    { background: #f59e0b; }
+  .dot-GRIMAUD    { background: #8b5cf6; }
+  .dot-GILLES     { background: #ef4444; }
+  .dot-ZIMMERMANN { background: #0ea5e9; }
+  .dot-RABETGE    { background: #10b981; }
+  .dot-KLEIN      { background: #f97316; }
+  .dot-DEBS       { background: #7c3aed; }
+  .dot-VAUBOURG   { background: #d946ef; }
+  .dot-MARTEL     { background: #16a34a; }
+  .dot-DALMAS     { background: #e11d48; }
+  .dot-CHRISTOPHE { background: #0284c7; }
+  .dot-CLAUDE     { background: #ca8a04; }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .calendar-scroll { padding: 12px; }
+    .day-cell { min-height: 60px; padding: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Calendrier JRTT 2026</h1>
+  <span class="sync-status loading" id="syncStatus">Connexion...</span>
+</header>
+
+<div class="page-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Personnes</h2>
+      <button class="toggle-all-btn" id="toggleAllBtn" onclick="toggleAll()">Tout desactiver</button>
+    </div>
+    <div class="person-list" id="personList"></div>
+  </aside>
+
+  <div class="main-content">
+    <div class="toolbar">
+      <button class="nav-btn" onclick="prevMonth()">&#8592; Precedent</button>
+      <div class="month-label" id="monthLabel"></div>
+      <button class="nav-btn" onclick="nextMonth()">Suivant &#8594;</button>
+      <button class="today-btn" onclick="goToday()">Aujourd'hui</button>
+      <div class="sep"></div>
+      <span class="total-badge" id="totalBadge">0 JRTT ce mois</span>
+    </div>
+    <div class="calendar-scroll">
+      <div class="calendar-grid" id="calGrid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, setDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDU4aG4r7Q2240-ZwUdkxoLUJzHz_hWB1k",
+    authDomain: "jrtt-40d51.firebaseapp.com",
+    projectId: "jrtt-40d51",
+    storageBucket: "jrtt-40d51.firebasestorage.app",
+    messagingSenderId: "687953805213",
+    appId: "1:687953805213:web:a74a14667da4874a58b974"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const INITIAL_DATA = {"SCHENCK":["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-02-13","2026-02-27","2026-03-13","2026-03-20","2026-04-30","2026-05-07"],"CALLEA":["2026-04-22","2026-04-23","2026-04-24"],"KOESSLER":["2026-02-06","2026-02-20","2026-03-06","2026-03-20","2026-04-10","2026-04-24","2026-05-15","2026-05-29","2026-07-03"],"MARCHAL":["2026-01-19","2026-01-20","2026-01-23","2026-01-29","2026-01-30","2026-03-26","2026-03-27","2026-03-30","2026-03-31","2026-04-24","2026-06-12","2026-06-19","2026-06-26","2026-07-03","2026-07-10","2026-07-13","2026-08-20","2026-08-21","2026-09-24","2026-09-25","2026-10-02","2026-10-09","2026-10-15","2026-10-16","2026-10-22","2026-10-23","2026-11-06","2026-11-12","2026-11-13","2026-11-20","2026-11-26","2026-11-27","2026-12-04","2026-12-11","2026-12-24","2027-01-08","2027-01-15","2027-01-21","2027-01-22","2027-01-28","2027-01-29"],"GRIMAUD":["2026-04-07","2026-04-08","2026-04-09","2026-04-10","2026-05-11","2026-05-12","2026-05-13","2026-05-15","2026-05-18","2026-09-07","2026-09-08","2026-09-09","2026-09-10","2026-09-11","2026-12-07","2026-12-08","2026-12-09","2026-12-10","2026-12-11","2026-12-23","2026-12-28","2026-12-29","2026-12-30","2026-12-31"],"GILLES":["2026-02-06","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-03-06","2026-03-13","2026-03-27","2026-04-13","2026-04-14","2026-04-15","2026-04-16","2026-04-17","2026-04-24","2026-05-15","2026-05-29","2026-06-01","2026-06-03","2026-07-03","2026-07-06","2026-07-07","2026-07-08","2026-08-07","2026-08-14","2026-08-17","2026-08-21","2026-08-28","2026-09-11","2026-09-25","2026-10-05","2026-10-16","2026-10-23"],"ZIMMERMANN":["2026-02-02","2026-02-27","2026-03-06","2026-03-13","2026-04-02","2026-04-24","2026-04-30","2026-05-04","2026-05-15","2026-06-15","2026-06-29","2026-07-02"],"RABETGE":["2026-02-20","2026-02-25","2026-02-26","2026-02-27","2026-03-13","2026-04-24","2026-04-28","2026-04-29","2026-04-30","2026-05-07","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10"],"KLEIN":["2026-02-16","2026-02-17","2026-02-25","2026-02-26","2026-02-27","2026-03-13","2026-04-16","2026-04-17","2026-04-20","2026-04-21","2026-04-22","2026-06-08","2026-06-22","2026-07-03","2026-07-10","2026-07-11","2026-07-12","2026-07-13","2026-07-15","2026-07-16","2026-07-17","2026-09-11","2026-09-28","2026-10-21","2026-10-22","2026-10-23","2026-10-26","2026-10-27","2026-10-28","2026-11-09","2026-11-23","2026-12-11","2026-12-28","2026-12-29","2026-12-30","2026-12-31","2027-01-01"],"DEBS":["2026-01-19","2026-02-06","2026-02-12","2026-02-13","2026-02-23","2026-03-05","2026-03-06","2026-03-13","2026-03-20","2026-04-07","2026-04-08","2026-04-09","2026-04-10","2026-04-27","2026-05-06","2026-05-07","2026-05-15","2026-05-29","2026-06-05","2026-06-08","2026-06-09","2026-06-15","2026-06-29","2026-07-02","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07","2026-08-10","2026-08-11","2026-08-12","2026-08-31","2026-09-01","2026-09-14","2026-09-25","2026-10-02","2026-10-09","2026-10-16","2026-10-23"],"VAUBOURG":["2026-01-19","2026-01-30","2026-02-02","2026-02-13","2026-02-16","2026-02-23","2026-03-09","2026-03-13","2026-03-16","2026-03-27","2026-04-17","2026-04-20","2026-05-05","2026-05-06","2026-05-07","2026-05-15","2026-05-18","2026-06-05","2026-06-08","2026-06-18","2026-06-19","2026-06-22","2026-07-03","2026-07-13","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31","2026-08-24","2026-08-25"],"MARTEL":["2026-01-23","2026-02-13","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-27","2026-04-07","2026-04-08","2026-04-13","2026-04-14","2026-04-15","2026-04-16","2026-04-17"],"DALMAS":["2026-02-09","2026-02-13","2026-02-20","2026-03-06","2026-03-13","2026-03-27","2026-04-10","2026-04-17","2026-04-30","2026-05-07","2026-05-15","2026-05-18","2026-05-29","2026-06-05","2026-06-12"],"CHRISTOPHE":["2026-03-06","2026-03-09","2026-05-11","2026-05-12","2026-05-13","2026-05-15"],"CLAUDE":["2026-01-19","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"]};
+
+  const PERSONS = Object.keys(INITIAL_DATA).sort();
+  const MONTHS_FR = ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+  const DAYS_FR   = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+
+  let jrttData     = {};
+  let activePersons = new Set(PERSONS);
+  let currentYear  = 2026;
+  let currentMonth = 0;
+
+  // ── FIREBASE ────────────────────────────────────────────────────────────
+  async function initData() {
+    setStatus('loading', 'Connexion...');
+    try {
+      const colRef = collection(db, 'jrtt');
+      const snap   = await getDocs(colRef);
+
+      if (snap.empty) {
+        setStatus('loading', 'Initialisation des donnees...');
+        for (const [nom, dates] of Object.entries(INITIAL_DATA)) {
+          await setDoc(doc(db, 'jrtt', nom), { dates });
+        }
+        jrttData = { ...INITIAL_DATA };
+      } else {
+        snap.forEach(d => { jrttData[d.id] = d.data().dates || []; });
+      }
+
+      setStatus('ok', 'Synchronise');
+      buildSidebar();
+      render();
+
+      // Temps reel
+      onSnapshot(colRef, snapshot => {
+        snapshot.forEach(d => { jrttData[d.id] = d.data().dates || []; });
+        buildSidebar();
+        render();
+      });
+
+    } catch (err) {
+      console.error(err);
+      jrttData = { ...INITIAL_DATA };
+      setStatus('error', 'Mode local');
+      buildSidebar();
+      render();
+    }
+  }
+
+  function setStatus(type, msg) {
+    const el = document.getElementById('syncStatus');
+    el.textContent = msg;
+    el.className = 'sync-status ' + type;
+  }
+
+  // ── SIDEBAR ──────────────────────────────────────────────────────────────
+  function buildSidebar() {
+    const container = document.getElementById('personList');
+    const scrollTop = container.scrollTop;
+    container.innerHTML = '';
+    PERSONS.forEach(nom => {
+      const count = (jrttData[nom] || []).length;
+      const li = document.createElement('div');
+      li.className = 'person-item' + (activePersons.has(nom) ? '' : ' inactive');
+      li.id = 'pi-' + nom;
+      li.onclick = () => togglePerson(nom);
+      li.innerHTML = `
+        <div class="color-dot dot-${nom}"></div>
+        <span class="person-name">${nom}</span>
+        <span class="person-count">${count}</span>
+      `;
+      container.appendChild(li);
+    });
+    container.scrollTop = scrollTop;
+  }
+
+  function togglePerson(nom) {
+    if (activePersons.has(nom)) activePersons.delete(nom);
+    else activePersons.add(nom);
+    buildSidebar();
+    render();
+    updateToggleBtn();
+  }
+
+  function updateToggleBtn() {
+    document.getElementById('toggleAllBtn').textContent =
+      activePersons.size === PERSONS.length ? 'Tout desactiver' : 'Tout activer';
+  }
+
+  window.toggleAll = function() {
+    if (activePersons.size === PERSONS.length) activePersons.clear();
+    else PERSONS.forEach(n => activePersons.add(n));
+    buildSidebar();
+    render();
+    updateToggleBtn();
+  };
+
+  // ── NAVIGATION ───────────────────────────────────────────────────────────
+  window.prevMonth = function() {
+    currentMonth--;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    render();
+  };
+
+  window.nextMonth = function() {
+    currentMonth++;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    render();
+  };
+
+  window.goToday = function() {
+    const n = new Date();
+    currentYear  = n.getFullYear();
+    currentMonth = n.getMonth();
+    render();
+  };
+
+  // ── RENDER ───────────────────────────────────────────────────────────────
+  function render() {
+    document.getElementById('monthLabel').textContent =
+      `${MONTHS_FR[currentMonth]} ${currentYear}`;
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    // En-tetes colonnes
+    const emptyHead = document.createElement('div');
+    emptyHead.className = 'col-head col-head-empty';
+    grid.appendChild(emptyHead);
+    DAYS_FR.forEach(d => {
+      const h = document.createElement('div');
+      h.className = 'col-head';
+      h.textContent = d;
+      grid.appendChild(h);
+    });
+
+    // Index des JRTT pour ce mois
+    const dateIndex = {};
+    PERSONS.forEach(nom => {
+      if (!activePersons.has(nom)) return;
+      (jrttData[nom] || []).forEach(d => {
+        if (!dateIndex[d]) dateIndex[d] = [];
+        dateIndex[d].push(nom);
+      });
+    });
+
+    const today   = new Date();
+    const todayStr = fmtDate(today);
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const lastDay  = new Date(currentYear, currentMonth + 1, 0);
+    let startDow   = firstDay.getDay();
+    startDow = startDow === 0 ? 6 : startDow - 1;
+
+    const totalCells = Math.ceil((startDow + lastDay.getDate()) / 7) * 7;
+    const cursor = new Date(currentYear, currentMonth, 1 - startDow);
+    let totalCount = 0;
+
+    for (let i = 0; i < totalCells; i++) {
+      if (i % 7 === 0) {
+        const wn = document.createElement('div');
+        wn.className = 'week-num';
+        wn.textContent = 'S' + getWeek(cursor);
+        grid.appendChild(wn);
+      }
+
+      const y = cursor.getFullYear();
+      const m = cursor.getMonth();
+      const d = cursor.getDate();
+      const dateStr     = fmtDate(cursor);
+      const isCurrent   = m === currentMonth && y === currentYear;
+      const dow         = cursor.getDay();
+      const isWeekend   = dow === 0 || dow === 6;
+      const isToday     = dateStr === todayStr;
+
+      const cell = document.createElement('div');
+      cell.className = 'day-cell'
+        + (!isCurrent  ? ' other-month' : '')
+        + (isWeekend   ? ' weekend'     : '')
+        + (isToday     ? ' today'       : '');
+
+      const num = document.createElement('div');
+      num.className = 'day-num';
+      num.textContent = d;
+      cell.appendChild(num);
+
+      const wrap = document.createElement('div');
+      wrap.className = 'tags-wrap';
+
+      const personsToday = dateIndex[dateStr] || [];
+      personsToday.forEach(nom => {
+        if (isCurrent) totalCount++;
+        const tag = document.createElement('div');
+        tag.className = `jrtt-tag c-${nom}`;
+        tag.textContent = nom;
+        tag.title = `${nom} — JRTT — ${dateStr}`;
+        wrap.appendChild(tag);
+      });
+
+      cell.appendChild(wrap);
+      grid.appendChild(cell);
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    document.getElementById('totalBadge').textContent =
+      `${totalCount} JRTT ce mois`;
+  }
+
+  function fmtDate(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function getWeek(d) {
+    const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const day = dt.getUTCDay() || 7;
+    dt.setUTCDate(dt.getUTCDate() + 4 - day);
+    const y1 = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
+    return Math.ceil((((dt - y1) / 86400000) + 1) / 7);
+  }
+
+  // ── INIT ─────────────────────────────────────────────────────────────────
+  const now = new Date();
+  currentYear  = now.getFullYear();
+  currentMonth = now.getMonth();
+  // Si on est en 2026, on reste sur le mois courant, sinon on va en janvier 2026
+  if (currentYear !== 2026) { currentYear = 2026; currentMonth = 0; }
+
+  initData();
+</script>
+</body>
+</html>
